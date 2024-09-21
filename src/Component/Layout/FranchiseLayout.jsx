@@ -13,7 +13,7 @@ import {
   FaCog,
   FaUserCircle,
 } from 'react-icons/fa';
-import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Logo from '../../assets/SearchMyStudyLog.png';
 import Placeholder from '../../assets/Placeholder.png';
@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLogoutMutation } from '../../slices/userApiSlice';
 import { logout } from '../../slices/authSlice';
 import { toast } from 'react-toastify';
+import { useFetchNotifcationMutation } from '../../slices/adminApiSlice';
 
 const menuItems = [
   { icon: FaCube, label: 'Dashboard', link: '/frenchise/dashboard' },
@@ -38,27 +39,45 @@ const menuItems = [
   },
 ];
 
-export default function FranchiseLayout() {
+export default function PartnerLayout() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { userInfo } = useSelector((state) => state.auth);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [openSubmenuIndex, setOpenSubmenuIndex] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(''); 
+  const [searchTerm, setSearchTerm] = useState('');
   const [filteredItems, setFilteredItems] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [visibleNotifications, setVisibleNotifications] = useState(3); // To control visible notifications
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation(); // Get current URL path
+  const location = useLocation();
   const [logoutApiCall, { isSuccess }] = useLogoutMutation();
+  const [FetchNotifcation] = useFetchNotifcationMutation();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-  useEffect(()=>{
-    if(isSuccess){
-      toast.success("Logout success!")
-      navigate('/')
+
+  const toggleNotifications = async () => {
+    setIsNotificationsOpen(!isNotificationsOpen);
+
+    if (!isNotificationsOpen) {
+      try {
+        const response = await FetchNotifcation(userInfo._id).unwrap();
+        setNotifications(response);
+      } catch (err) {
+        console.error('Error fetching notifications:', err);
+      }
     }
-  },[isSuccess])
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('Logout success!');
+      navigate('/');
+    }
+  }, [isSuccess]);
 
   const toggleSubmenu = (index, event) => {
     event.preventDefault();
@@ -70,7 +89,7 @@ export default function FranchiseLayout() {
       await logoutApiCall().unwrap();
       dispatch(logout());
     } catch (err) {
-        console.log("Error",err)
+      console.log('Error', err);
     }
   };
 
@@ -94,6 +113,10 @@ export default function FranchiseLayout() {
     } else {
       setFilteredItems([]);
     }
+  };
+
+  const handleViewAllNotifications = () => {
+    setVisibleNotifications(notifications.length); // Show all notifications
   };
 
   return (
@@ -136,14 +159,14 @@ export default function FranchiseLayout() {
             {userInfo?.name}
           </span>
           <span className={`text-sm text-gray-500 ${isCollapsed ? 'hidden' : 'block'}`}>
-             {userInfo?.role.toUpperCase()}
+            {userInfo?.role.toUpperCase()}
           </span>
         </div>
 
         {/* Menu Items */}
         <nav>
           {menuItems.map((item, index) => {
-            const isActive = location.pathname.startsWith(item.link); // Check if the menu item is active
+            const isActive = location.pathname.startsWith(item.link);
             return (
               <div key={index}>
                 <div
@@ -156,7 +179,7 @@ export default function FranchiseLayout() {
                   }}
                   className={`flex items-center py-3 px-4 border-b ${
                     isActive
-                      ? 'bg-blue-100 text-blue-600' // Apply active styles
+                      ? 'bg-blue-100 text-blue-600'
                       : 'hover:bg-gray-100'
                   } ${isCollapsed ? 'justify-center' : ''} cursor-pointer`}
                 >
@@ -164,7 +187,7 @@ export default function FranchiseLayout() {
                     size={20}
                     className={`${
                       isActive ? 'text-blue-600' : 'text-gray-600'
-                    } ${isCollapsed ? 'text-center' : 'mr-4'}`} // Change icon color if active
+                    } ${isCollapsed ? 'text-center' : 'mr-4'}`}
                   />
                   {!isCollapsed && <span>{item.label}</span>}
                   {item.hasSubmenu && !isCollapsed && (
@@ -233,7 +256,7 @@ export default function FranchiseLayout() {
                     >
                       {item.parentLabel && (
                         <span className="text-xs text-gray-400">
-                          {item.parentLabel} {' '}
+                          {item.parentLabel} &gt;
                         </span>
                       )}
                       {item.label}
@@ -243,35 +266,95 @@ export default function FranchiseLayout() {
               )}
             </div>
 
-            <div className="flex items-center space-x-8 mr-10">
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                + Create New
-              </button>
-              <FaBell size={20} className="text-gray-500" />
-              <FaCog size={20} className="text-gray-500" />
+            <div className="flex items-center mr-[50px] space-x-6">
               <div className="relative">
-                <FaUserCircle
-                  size={24}
-                  className="text-gray-500 transition-opacity duration-300 cursor-pointer"
+                <button
+                  onClick={toggleNotifications}
+                  className="relative text-gray-600 focus:outline-none"
+                >
+                  <FaBell size={30} />
+                  <span className="absolute top-0 right-0 bg-red-600 text-white text-sm rounded-full px-1">
+                    {notifications.length}
+                  </span>
+                </button>
+
+                {/* Notifications Dropdown */}
+                {isNotificationsOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute mt-2 right-0 w-64 bg-white shadow-lg rounded-lg z-10 border border-gray-200"
+                  >
+                    <h2 className="text-center font-medium py-2">Notifications</h2>
+                    <div className="p-2 flex flex-col">
+                      {notifications.slice(0, visibleNotifications).map((notification, index) => (
+                        <span
+                        onClick={()=>navigate('/partner/notification')}
+                          key={index}
+                          className="border-b py-2 px-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          {notification.message}
+                        </span>
+                      ))}
+                    </div>
+                    {visibleNotifications < notifications.length && (
+                      <button
+                        className="block text-center w-full py-2 bg-gray-100 hover:bg-gray-200"
+                        onClick={handleViewAllNotifications}
+                      >
+                        View All Notifications
+                      </button>
+                    )}
+                  </motion.div>
+                )}
+              </div>
+
+              <div className="relative">
+                <button
                   onClick={toggleDropdown}
-                />
+                  className="relative text-gray-600 focus:outline-none"
+                >
+                  <FaUserCircle size={30} />
+                </button>
+
+                {/* Dropdown */}
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg border border-gray-200 w-48">
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute mt-2 right-0 w-40 bg-white shadow-lg rounded-lg z-10 border border-gray-200"
+                  >
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      to="/settings"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Settings
+                    </Link>
                     <button
                       onClick={logoutHandler}
-                      className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Logout
                     </button>
-                  </div>
+                  </motion.div>
                 )}
               </div>
             </div>
           </div>
         </header>
 
-        {/* Outlet */}
-        <main className="flex-1 p-6 overflow-y-auto">
+        {/* Main Content Outlet */}
+        <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
       </div>
