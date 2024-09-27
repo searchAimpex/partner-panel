@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFetchUniversityMutation } from '../../slices/adminApiSlice';
 import { FetchUniversitys } from '../../slices/universitySlice';
+import { useNavigate } from 'react-router-dom';
 
 const PartnerUniversityScreen = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const { university } = useSelector(state => state.university);
   const [FetchUniversity, { isSuccess }] = useFetchUniversityMutation();
@@ -65,7 +67,9 @@ const PartnerUniversityScreen = () => {
                   </a>
                 </td>
                 <td className="px-4 py-2">
-                  <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                  <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                   onClick={() => navigate(`/partner/university/${uni._id}`)} // Navigate on click
+                  >
                     View
                   </button>
                 </td>

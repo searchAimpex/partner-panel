@@ -22,6 +22,8 @@ import PartnerAddUserScreen from './Screen/Partner/PartnerAddUserScreen.jsx';
 import PartnerViewUserScreen from './Screen/Partner/PartnerViewUserScreen.jsx';
 import RedirectAfterLogin from './Component/Routes/RedirectAfterLogin.jsx';
 import NotificationScreen from './Screen/NotificationScreen.jsx';
+import PartnerCountryScreenDetailed from './Screen/Partner/PartnerCountryScreenDetailed.jsx';
+import PartnerUniversityScreenDetailed from './Screen/Partner/PartnerUniversityScreenDetailed.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,11 +34,14 @@ const router = createBrowserRouter(
       <Route element={<PartnerRoutes />}>
         <Route path= '/partner/dashboard' element={<DashboardScreen/>} />
         <Route path= '/partner/university' element={<PartnerUniversityScreen/>} />
+        <Route path = '/partner/university/:id' element = {<PartnerUniversityScreenDetailed />} />
         <Route path = '/partner/country' element = {< PartnerCountryScreen/>} />
         <Route path = '/partner/course' element = {< PartnerCourseScreen/>} />
         <Route path = '/partner/addUser' element = {< PartnerAddUserScreen/>} />
         <Route path = '/partner/viewUser' element = {< PartnerViewUserScreen/>} />
         <Route path = '/partner/notification' element= {<NotificationScreen />} />
+        <Route path = '/partner/country/:id' element= {<PartnerCountryScreenDetailed />} />
+
       </Route>
       <Route element={<FrenchiseRoutes />}>
         <Route path= '/frenchise/dashboard' element={<DashboardScreen/>} />

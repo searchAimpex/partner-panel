@@ -40,13 +40,18 @@ export const userApiSlice = apiSlice.injectEndpoints({
             query:(data)=>({
                 url: `${USERS_URL}/extrauser/${data}`,
                 method: 'GET',
-                
             }),
         }),
         fetchNotifcation:builder.mutation({
             query: (data)=> ({
                 url:`${USERS_URL}/notify-me/${data}`,
                 method: 'GET'
+            }),
+        }),
+        FetchOneUniversity:builder.mutation({
+            query:(id)=>({
+                url: `${USERS_URL}/university/${id}`,
+                method: 'GET',
             }),
         }),
 
@@ -56,5 +61,5 @@ export const userApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMutation,useFetchProvinceMutation,
-    useAddUserMutation,useFetchUserMutation,useFetchNotifcationMutation
+    useAddUserMutation,useFetchUserMutation,useFetchNotifcationMutation,useFetchOneUniversityMutation
 } = userApiSlice

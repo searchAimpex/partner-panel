@@ -16,10 +16,33 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
       }),
     }),
+    userBlock: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/block/${data.userId}`,
+        method: 'PUT',
+        body: data.status
+      }),
+    }),
+    CountryGet: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/secondcountry`,
+        method: 'GET',
+      }),
+    }),
+    CountryGetOne: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/secondcountry/${data}`,
+        method: 'GET',
+      
+      }),
+    }),
   }),
 });
 
 export const {
   useLoginMutation,
   useLogoutMutation,  
+  useUserBlockMutation,
+  useCountryGetMutation,
+  useCountryGetOneMutation,
 } = userApiSlice;

@@ -2,11 +2,14 @@ import React, { useEffect } from 'react';
 import { useFetchUserMutation } from '../../slices/adminApiSlice';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaSpinner } from 'react-icons/fa'; // For a loading spinner
+import { FaSpinner } from 'react-icons/fa';
+import { useUserBlockMutation } from '../../slices/userApiSlice';
+import { updateBlockUser } from '../../slices/authSlice';
 
 export default function PartnerViewUserScreen() {
   const dispatch = useDispatch();
   const [fetchUser, { data, isLoading, isSuccess, isError, error }] = useFetchUserMutation();
+  const [blockUser] = useUserBlockMutation();
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -22,6 +25,22 @@ export default function PartnerViewUserScreen() {
 
     getUsers();
   }, [fetchUser, userInfo, dispatch]);
+
+  const handleToggleBlock = async (userId, isBlocked) => {
+    try {
+        const data =  { 
+            userId:userId,
+            status: { 
+                block:!isBlocked
+            }
+        }
+      const res = await blockUser(data).unwrap();
+    //   dispatch(updateBlockUser(res))
+      toast.success(isBlocked ? 'User unblocked successfully' : 'User blocked successfully');
+    } catch (err) {
+      toast.error('Failed to update user status');
+    }
+  };
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -53,19 +72,30 @@ export default function PartnerViewUserScreen() {
                 <th className="py-3 px-5 text-left">Role</th>
                 <th className="py-3 px-5 text-left">Created By</th>
                 <th className="py-3 px-5 text-left">Created At</th>
+                <th className="py-3 px-5 text-left">Action</th>
               </tr>
             </thead>
             <tbody>
               {data?.map((user, index) => (
                 <tr
                   key={user._id}
-                  className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors duration-200`}
-                >
+                  className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors duration-200`}>
                   <td className="py-3 px-5">{user.name}</td>
                   <td className="py-3 px-5">{user.email}</td>
                   <td className="py-3 px-5">{user.role}</td>
                   <td className="py-3 px-5">{user.createdBy?.name || 'N/A'}</td>
                   <td className="py-3 px-5">{new Date(user.createdAt).toLocaleDateString()}</td>
+                  <td className="py-3 px-5">
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={user.block}
+                        onChange={() => handleToggleBlock(user._id, user.block)}
+                        className="form-checkbox h-5 w-5 text-blue-600"
+                      />
+                      <span className="ml-2">{user.block ? 'Unblock' : 'Block'}</span>
+                    </label>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -73,5 +103,5 @@ export default function PartnerViewUserScreen() {
         </div>
       )}
     </div>
-  );
+    );
 }

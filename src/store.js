@@ -5,6 +5,7 @@ import universityReducer from './slices/universitySlice';
 import provinceReducer from './slices/provinceSlice';
 import courseReducer from './slices/courseSlice';
 import notificationsReducer from './slices/notificationSlice';
+import SecondCountryReducer from './slices/secondCountrySlice'
 import { apiSlice } from './slices/apiSlice';
 
 
@@ -18,7 +19,8 @@ const store = configureStore({
     university:universityReducer,
     province: provinceReducer,
     course: courseReducer,
-    notifications:notificationsReducer
+    notifications:notificationsReducer,
+    SecondCountry:SecondCountryReducer
 
   },
   middleware: (getDefaultMiddleware) =>
