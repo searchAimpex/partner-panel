@@ -29,38 +29,48 @@ export default function PartnerCountryScreenDetailed() {
   return (
     <div className="container mx-auto p-6">
       {/* Page Heading */}
-      <h1 className="text-4xl font-bold text-center text-blue-main mb-10">
+      <h1 className="text-4xl font-bold text-center text-blue-main mb-14">
         Country Detailed Page
       </h1>
 
       {/* First Row: 3 cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
         {/* Card 1: Flag and Country Name */}
-        <div className="bg-white shadow-lg rounded-xl p-6 transition-transform hover:scale-105 duration-300 ease-in-out">
-          <FaFlag className="w-20 h-20 text-blue-main mx-auto" />
-          <h2 className="text-2xl font-bold text-center mt-6 text-blue-main">
+        <div className="bg-white shadow-lg flex flex-row justify-center items-center space-x-10 rounded-xl p-3 transition-transform hover:scale-105 duration-300 ease-in-out">
+          <img src= {singleCountry.flagURL} className="w-12 h-12 text-blue-main" />
+          <h2 className="text-2xl font-bold text-center text-blue-main">
             {singleCountry.name}
           </h2>
         </div>
 
         {/* Card 2: Currency */}
-        <div className="bg-white shadow-lg rounded-xl p-6 transition-transform hover:scale-105 duration-300 ease-in-out">
+        <div className="bg-white shadow-lg flex flex-row justify-center items-center space-x-10 rounded-xl p-3 transition-transform hover:scale-105 duration-300 ease-in-out">
           <div className="flex items-center justify-center">
-            <FaMoneyBillAlt className="w-20 h-20 text-blue-main" />
+            <FaMoneyBillAlt className="w-12 h-12 text-blue-main" />
           </div>
-          <p className="text-xl font-bold text-center mt-6 text-blue-main">
-            Currency: {singleCountry.currency}
-          </p>
+          <div className='flex flex-col'>
+            <p className="text-xl font-bold text-center text-blue-main">
+                Currency
+            </p>
+            <p className="text-xl font-bold text-center text-blue-main">
+                {singleCountry.currency}
+            </p>
+          </div>
         </div>
 
         {/* Card 3: Country Code */}
-        <div className="bg-white shadow-lg rounded-xl p-6 transition-transform hover:scale-105 duration-300 ease-in-out">
+        <div className="bg-white shadow-lg flex flex-row justify-center items-center space-x-10 rounded-xl p-3 transition-transform hover:scale-105 duration-300 ease-in-out">
           <div className="flex items-center justify-center">
-            <FaRegQuestionCircle className="w-20 h-20 text-blue-main" />
+            <FaRegQuestionCircle className="w-12 h-12 text-blue-main" />
           </div>
-          <p className="text-xl font-bold text-center mt-6 text-blue-main">
-            Code: {singleCountry.code}
-          </p>
+          <div className='flex flex-col'>
+            <p className="text-xl font-bold text-center text-blue-main">
+                Code
+            </p>
+            <p className="text-xl font-bold text-center text-blue-main">
+                 {singleCountry.code}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -83,7 +93,7 @@ export default function PartnerCountryScreenDetailed() {
           className="bg-white shadow-lg rounded-xl p-6 cursor-pointer hover:shadow-xl transition-transform hover:scale-105 duration-300 ease-in-out"
           onClick={() => window.open(singleCountry.vfs, '_blank')}
         >
-          <h3 className="text-center text-xl font-bold text-gold-main">VFS</h3>
+          <h3 className="text-center text-xl font-bold text-gold-main">VISA PROCESS</h3>
           <FaFileAlt className="w-16 h-16 text-blue-main mx-auto mt-4" />
           <p className="text-center mt-4 text-blue-main font-medium">
             View VFS Document

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import { useCountryGetMutation } from '../../slices/userApiSlice';
 import { FetchSecondCountry } from '../../slices/secondCountrySlice';
 import { toast } from 'react-toastify';
 
 const PartnerCountryScreen = () => {
   const [page, setPage] = useState(0);
-  const dispatch = useDispatch();
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchTerm, setSearchTerm] = useState(''); // State for search term
+  const dispatch = useDispatch();
   const { countries } = useSelector((state) => state.SecondCountry);
   const [CountryFetch] = useCountryGetMutation();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +35,12 @@ const PartnerCountryScreen = () => {
     setPage(0);
   };
 
-  const paginatedCountries = countries.slice(
+  // Filter countries based on the search term
+  const filteredCountries = countries.filter(country =>
+    country.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const paginatedCountries = filteredCountries.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -42,6 +48,16 @@ const PartnerCountryScreen = () => {
   return (
     <div className="container mx-auto my-8 p-4 bg-gray-100 rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold mb-4">Country View</h2>
+      
+      {/* Search input */}
+      <input
+        type="text"
+        placeholder="Search by country name"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="mb-4 p-2 border border-gray-300 rounded"
+      />
+
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded-lg shadow">
           <thead className="bg-gray-200">
@@ -72,7 +88,7 @@ const PartnerCountryScreen = () => {
                 <td className="px-4 py-2">
                   <button
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                    onClick={() => navigate(`/partner/country/${country._id}`)} // Navigate on click
+                    onClick={() => navigate(`/partner/country/${country._id}`)}
                   >
                     View
                   </button>
@@ -104,7 +120,7 @@ const PartnerCountryScreen = () => {
           <button
             onClick={() => handleChangePage(page + 1)}
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 disabled:opacity-50"
-            disabled={page >= Math.ceil(countries.length / rowsPerPage) - 1}
+            disabled={page >= Math.ceil(filteredCountries.length / rowsPerPage) - 1}
           >
             Next
           </button>
