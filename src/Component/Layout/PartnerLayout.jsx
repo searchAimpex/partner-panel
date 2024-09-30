@@ -37,6 +37,15 @@ const menuItems = [
       { label: 'View User', link: '/partner/viewUser' },
     ],
   },
+  {
+    icon: FaUser,
+    label: 'Student Pages',
+    hasSubmenu: true,
+    submenu: [
+      { label: 'Add Student', link: '/partner/student/add' },
+      { label: 'View Student', link: '/partner/student/view' },
+    ],
+  },
 ];
 
 export default function PartnerLayout() {

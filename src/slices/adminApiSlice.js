@@ -54,6 +54,19 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 method: 'GET',
             }),
         }),
+        CreateStudent:builder.mutation({
+            query:(data)=>({
+                url: `${USERS_URL}/student`,
+                method: 'POST',
+                body:data
+            }),
+        }),
+        GetStudentByUser: builder.mutation({
+            query:(id)=>({
+                url: `${USERS_URL}/student/${id}`,
+                method: 'GET',
+            }),
+        })
 
 
     })
@@ -61,5 +74,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMutation,useFetchProvinceMutation,
-    useAddUserMutation,useFetchUserMutation,useFetchNotifcationMutation,useFetchOneUniversityMutation
+    useAddUserMutation,useFetchUserMutation,useFetchNotifcationMutation,useFetchOneUniversityMutation,
+    useCreateStudentMutation,useGetStudentByUserMutation
 } = userApiSlice

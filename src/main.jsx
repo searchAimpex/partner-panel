@@ -24,6 +24,8 @@ import RedirectAfterLogin from './Component/Routes/RedirectAfterLogin.jsx';
 import NotificationScreen from './Screen/NotificationScreen.jsx';
 import PartnerCountryScreenDetailed from './Screen/Partner/PartnerCountryScreenDetailed.jsx';
 import PartnerUniversityScreenDetailed from './Screen/Partner/PartnerUniversityScreenDetailed.jsx';
+import PartnerAddStudentScreen from './Screen/Partner/PartnerAddStudentScreen.jsx';
+import PartnerViewStudent from './Screen/Partner/PartnerViewStudent.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -41,6 +43,8 @@ const router = createBrowserRouter(
         <Route path = '/partner/viewUser' element = {< PartnerViewUserScreen/>} />
         <Route path = '/partner/notification' element= {<NotificationScreen />} />
         <Route path = '/partner/country/:id' element= {<PartnerCountryScreenDetailed />} />
+        <Route path = '/partner/student/add'  element={< PartnerAddStudentScreen />}/>
+        <Route path = '/partner/student/view' element = {<PartnerViewStudent />} />
 
       </Route>
       <Route element={<FrenchiseRoutes />}>
