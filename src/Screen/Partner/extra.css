@@ -67,3 +67,6 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
+  .error { 
+    color: red;
+  }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useCreateStudentMutation } from '../../slices/adminApiSlice';
+import { useCountryFetchMutation, useCreateStudentMutation, useFetchProvinceMutation, useFetchUniversityMutation } from '../../slices/adminApiSlice';
 import './extra.css'; // Ensure you have this CSS file
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../../firebase';
@@ -8,15 +8,140 @@ import { useSelector } from 'react-redux';
 const steps = ['Personal Details', 'Contact Details', 'Course Details', 'Documents'];
 const storage = getStorage(app);
 
+const StepTracker = ({ steps, activeStep }) => {
+    return (
+      <div className="step-tracker flex justify-between items-center mb-6">
+        {steps.map((step, index) => (
+          <div key={index} className="flex flex-col items-center flex-grow">
+            <div className="flex w-full items-center">
+              <div
+                className={`step flex items-center justify-center w-12 h-10 rounded-full border-2 ${
+                  index === activeStep ? 'border-blue-500 bg-blue-500 text-white' : 'border-gray-300'
+                }`}
+              >
+                <span className="step-number text-lg font-semibold">{index + 1}</span>
+              </div>
+              {/* Show the line connecting steps */}
+              {index < steps.length - 1 && (
+                <div
+                  className={`step-line h-1 w-full flex-grow mx-2 ${
+                    index < activeStep ? 'bg-blue-500' : 'bg-gray-300'
+                  }`}
+                ></div>
+              )}
+            </div>
+            {/* Step label displayed below the step number */}
+            <span
+              className={`mt-2 text-sm font-medium ${
+                index <= activeStep ? 'text-blue-500' : 'text-gray-500'
+              }`}
+            >
+              {step}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  
+
 export default function PartnerAddStudentScreen() {
   const [createStudent,{isSuccess}] = useCreateStudentMutation();
   const [activeStep, setActiveStep] = useState(0);
-  const {userInfo} = useSelector(state=>state.auth)
+  const {userInfo} = useSelector(state=>state.auth);
+   
+  
+    // State for fetched data
+    const [countries, setCountries] = useState([]);
+    const [provinces, setProvinces] = useState([]);
+    const [universities, setUniversities] = useState([]);
+    const [filteredProvinces, setFilteredProvinces] = useState([]); // Filtered provinces based on selected country
+  
+    // Fetch mutations
+    const [fetchCountries] = useCountryFetchMutation();
+    const [fetchProvinces] = useFetchProvinceMutation();
+    const [fetchUniversities] = useFetchUniversityMutation();
+  
+    // Fetch countries and provinces on component mount
+    useEffect(() => {
+      const loadCountries = async () => {
+        const response = await fetchCountries();
+        if (response?.data) {
+          setCountries(response.data); // Set all countries
+        }
+      };
+  
+      const loadProvinces = async () => {
+        const response = await fetchProvinces(); // Fetch all provinces
+        if (response?.data) {
+          setProvinces(response.data); // Set all provinces
+        }
+      };
+  
+      loadCountries();
+      loadProvinces();
+    }, [fetchCountries, fetchProvinces]);
+  
+    const handleInputChange2 = async (e) => {
+        const { name, value } = e.target;
+      
+        // Update form data
+        const updatedFormData = { ...formData, [name]: value };
+      
+        // Filter provinces when a country is selected
+        if (name === 'Country' && value) {
+          const countryProvinces = provinces.filter(
+            (province) => province.Country._id === value // Filter based on Country ID
+          );
+          setFilteredProvinces(countryProvinces); // Update filtered provinces
+      
+          // Reset province and university when a new country is selected
+          updatedFormData.Province = '';
+          updatedFormData.University = '';
+          setUniversities([]); // Clear universities when country changes
+        }
+      
+        // Fetch universities when a province is selected
+        if (name === 'Province' && value) {
+          const response = await fetchUniversities(); // Pass selected province ID
+          if (response?.data) {
+            setUniversities(response.data); // Set universities related to selected province
+            updatedFormData.University = ''; // Reset university
+          }
+        }
+      
+        // Finally, set the form data with all changes
+        setFormData(updatedFormData);
+      };
+      
+ 
   useEffect(()=>{
     if(isSuccess){
         toast.success("Add student")
     }
   },[isSuccess])
+  const [formErrors, setFormErrors] = useState({});
+  // Validation function
+const validateFields = () => {
+    let errors = {};
+    if (!formData.firstName) errors.firstName = 'First Name is required';
+    if (!formData.lastName) errors.lastName = 'Last Name is required';
+    if (!formData.dob) errors.dob = 'Date of Birth is required';
+    if (!formData.gender) errors.gender = 'Gender is required';
+    // if(!formData.postCode) errors.postCode = "Post Code is required";
+    // if (!formData.mobileNumber) errors.mobileNumber = 'Mobile Number is required';
+    // if (!formData.emailID) errors.emailID = 'Email ID is required';
+    // if (!formData.address) errors.address = 'Address is required';
+    // if (!formData.country) errors.country = 'Country is required';
+    // if (!formData.state) errors.state = 'State is required';
+    // if (!formData.city) errors.city = 'City is required';
+
+    setFormErrors(errors);
+    // Return true if no errors
+    return Object.keys(errors).length === 0;
+  };
+  
   const [formData, setFormData] = useState({
     User: userInfo._id,
     firstName: '',
@@ -71,10 +196,16 @@ export default function PartnerAddStudentScreen() {
     medicalCertificate: '',
   });
   const handleNext = () => {
-    if (activeStep < steps.length - 1) {
-      setActiveStep((prev) => prev + 1);
-      console.log("Next step triggered");
+    console.log("1 =====>",validateFields())
+    if (validateFields()) { 
+        console.log("2 =====> No error")
+
+        if (activeStep < steps.length - 1) {
+            setActiveStep((prev) => prev + 1);
+            console.log("Next step triggered");
+          }
     }
+    
   };
   
   const handleBack = () => {
@@ -100,8 +231,8 @@ export default function PartnerAddStudentScreen() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-        console.log("submit data",formData)
-    //   await createStudent(formData).unwrap();
+        // console.log("submit data",formData)
+      await createStudent(formData).unwrap();
       // Handle success (e.g., show a success message, redirect)
     } catch (err) {
       // Handle error (e.g., show error message)
@@ -113,6 +244,10 @@ export default function PartnerAddStudentScreen() {
     const url = await getDownloadURL(storageRef);
     return url;
 };
+console.log("filterd university",universities)
+// console.log("fixx country",countries)
+// console.log("fetch province",provinces)
+// console.log("form data",formData)
 
   const renderStepContent = (step) => {
     switch (step) {
@@ -130,7 +265,9 @@ export default function PartnerAddStudentScreen() {
                 onChange={handleInputChange}
                 required
               />
+                 {formErrors.firstName && <span className="error">{formErrors.firstName}</span>}
             </div>
+
             <div className="form-group">
               <label htmlFor="middleName">Middle Name</label>
               <input
@@ -151,6 +288,7 @@ export default function PartnerAddStudentScreen() {
                 onChange={handleInputChange}
                 required
               />
+              {formErrors.lastName && <span className="error">{formErrors.lastName}</span>}
             </div>
             <div className="form-group">
               <label htmlFor="passportNumber">Passport No / Profile Evaluation UID *</label>
@@ -173,6 +311,7 @@ export default function PartnerAddStudentScreen() {
                 onChange={handleInputChange}
                 required
               />
+              {formErrors.dob && <span className="error">{formErrors.dob}</span>}
             </div>
             <div className="form-group">
               <label htmlFor="citizenship">Citizenship *</label>
@@ -187,6 +326,7 @@ export default function PartnerAddStudentScreen() {
             </div>
             <div className="form-group">
               <label>Gender *</label>
+              <div className='flex flex-row space-x-6'>
               <label>
                 <input
                   type="radio"
@@ -207,6 +347,9 @@ export default function PartnerAddStudentScreen() {
                   required
                 /> Female
               </label>
+              </div>
+              {formErrors.gender && <span className="error">{formErrors.gender}</span>}
+
             </div>
             <div className="form-group">
               <label htmlFor="photo">Photo</label>
@@ -233,6 +376,8 @@ export default function PartnerAddStudentScreen() {
                 value={formData.postCode}
                 onChange={handleInputChange}
               />
+                {formErrors.postCode && <span className="error">{formErrors.postCode}</span>}
+
             </div>
             <div className="form-group">
               <label htmlFor="mobileNumber">Mobile No *</label>
@@ -244,6 +389,8 @@ export default function PartnerAddStudentScreen() {
                 onChange={handleInputChange}
                 required
               />
+                {formErrors.mobileNumber && <span className="error">{formErrors.mobileNumber}</span>}
+
             </div>
             <div className="form-group">
               <label htmlFor="emailID">Email ID *</label>
@@ -255,6 +402,8 @@ export default function PartnerAddStudentScreen() {
                 onChange={handleInputChange}
                 required
               />
+                {formErrors.emailID && <span className="error">{formErrors.emailID}</span>}
+
             </div>
             <div className="form-group">
               <label htmlFor="address">Address *</label>
@@ -265,6 +414,8 @@ export default function PartnerAddStudentScreen() {
                 onChange={handleInputChange}
                 required
               ></textarea>
+                {formErrors.address && <span className="error">{formErrors.address}</span>}
+
             </div>
             <div className="form-group">
               <label htmlFor="country">Country *</label>
@@ -276,6 +427,8 @@ export default function PartnerAddStudentScreen() {
                 onChange={handleInputChange}
                 required
               />
+                {formErrors.country && <span className="error">{formErrors.country}</span>}
+
             </div>
             <div className="form-group">
               <label htmlFor="state">State</label>
@@ -286,6 +439,8 @@ export default function PartnerAddStudentScreen() {
                 value={formData.state}
                 onChange={handleInputChange}
               />
+                {formErrors.state && <span className="error">{formErrors.state}</span>}
+
             </div>
             <div className="form-group">
               <label htmlFor="city">City</label>
@@ -296,12 +451,14 @@ export default function PartnerAddStudentScreen() {
                 value={formData.city}
                 onChange={handleInputChange}
               />
+                {formErrors.city && <span className="error">{formErrors.city}</span>}
+
             </div>
           </>
         );
       case 2:
         return (
-          <>
+            <>
             {/* Course Details */}
             <div className="form-group">
               <label htmlFor="Country">Country *</label>
@@ -309,50 +466,67 @@ export default function PartnerAddStudentScreen() {
                 id="Country"
                 name="Country"
                 value={formData.Country}
-                onChange={handleInputChange}
+                onChange={handleInputChange2}
                 required
               >
                 <option value="">Select a country</option>
-                {/* Add country options */}
+                {countries.map((country) => (
+                  <option key={country._id} value={country._id}>
+                    {country.name}
+                  </option>
+                ))}
               </select>
             </div>
+      
             <div className="form-group">
               <label htmlFor="Province">Province *</label>
               <select
                 id="Province"
                 name="Province"
                 value={formData.Province}
-                onChange={handleInputChange}
+                onChange={handleInputChange2}
                 required
               >
                 <option value="">Select a province</option>
-                {/* Add province options */}
+                {filteredProvinces?.map((province) => (
+                  <option key={province._id} value={province._id}>
+                    {province.name}
+                  </option>
+                ))}
               </select>
             </div>
+      
             <div className="form-group">
               <label htmlFor="University">University *</label>
               <select
                 id="University"
                 name="University"
                 value={formData.University}
-                onChange={handleInputChange}
+                onChange={handleInputChange2}
                 required
+                disabled={!formData.Province} // Disable until province is selected
               >
                 <option value="">Select a university</option>
-                {/* Add university options */}
+                {universities.map((university) => (
+                  <option key={university._id} value={university._id}>
+                    {university.name}
+                  </option>
+                ))}
               </select>
             </div>
+      
             <div className="form-group">
               <label htmlFor="Course">Course *</label>
               <select
                 id="Course"
                 name="Course"
                 value={formData.Course}
-                onChange={handleInputChange}
+                onChange={handleInputChange2}
                 required
+                disabled={!formData.University} // Disable until university is selected
               >
                 <option value="">Select a course</option>
-                {/* Add course options */}
+                {/* Add your course options here */}
               </select>
             </div>
           </>
@@ -664,13 +838,15 @@ export default function PartnerAddStudentScreen() {
   return (
     <div className="partner-add-student-container p-5">
     <h1>Add New Student</h1>
-    <form onSubmit={handleSubmit}>
+    {/* Step Tracker */}
+    <StepTracker steps={steps} activeStep={activeStep} />
+    <div>
       <div className="grid grid-cols-3 gap-10 p-10">
         {renderStepContent(activeStep)}
       </div>
   
       <div className="form-navigation flex flex-row justify-between w-full">
-        {activeStep > 0 && (
+    
           <button
             type="button"
             onClick={handleBack}
@@ -679,7 +855,7 @@ export default function PartnerAddStudentScreen() {
           >
             Back
           </button>
-        )}
+        
   
         {activeStep < steps.length - 1 ? (
           <button
@@ -691,14 +867,14 @@ export default function PartnerAddStudentScreen() {
           </button>
         ) : (
           <button
-            onClick={()=>handleSubmit()}
+            onClick={(e)=>handleSubmit(e)}
             className="btn-submit"
           >
             Submit
           </button>
         )}
       </div>
-    </form>
+    </div>
   </div>
   );
 }
