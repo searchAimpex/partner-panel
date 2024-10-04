@@ -26,6 +26,8 @@ import PartnerCountryScreenDetailed from './Screen/Partner/PartnerCountryScreenD
 import PartnerUniversityScreenDetailed from './Screen/Partner/PartnerUniversityScreenDetailed.jsx';
 import PartnerAddStudentScreen from './Screen/Partner/PartnerAddStudentScreen.jsx';
 import PartnerViewStudent from './Screen/Partner/PartnerViewStudent.jsx';
+import StudentDetailedTrack from './Screen/Partner/StudentDetailedTrack.jsx';
+import PartnerTrackStudent from './Screen/Partner/PartnerTrackStudent.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,6 +47,8 @@ const router = createBrowserRouter(
         <Route path = '/partner/country/:id' element= {<PartnerCountryScreenDetailed />} />
         <Route path = '/partner/student/add'  element={< PartnerAddStudentScreen />}/>
         <Route path = '/partner/student/view' element = {<PartnerViewStudent />} />
+        <Route path='/partner/student/:id' element = {<StudentDetailedTrack />} />
+        <Route path = '/partner/student/track' element = {<PartnerTrackStudent />} />
 
       </Route>
       <Route element={<FrenchiseRoutes />}>

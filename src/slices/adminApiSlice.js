@@ -66,6 +66,18 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 url: `${USERS_URL}/student/${id}`,
                 method: 'GET',
             }),
+        }),
+        FetchOneStudent: builder.mutation({
+            query:(id)=>({
+                url: `${USERS_URL}/student/one/${id}`,
+                method: 'GET',
+            }),
+        }),
+        FetchOneStudentByTrackingID: builder.mutation({
+            query:(id)=>({
+                url: `${USERS_URL}/student/track/${id}`,
+                method: 'GET',
+            }),
         })
 
 
@@ -75,5 +87,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
 
 export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMutation,useFetchProvinceMutation,
     useAddUserMutation,useFetchUserMutation,useFetchNotifcationMutation,useFetchOneUniversityMutation,
-    useCreateStudentMutation,useGetStudentByUserMutation
+    useCreateStudentMutation,useGetStudentByUserMutation,useFetchOneStudentMutation,
+    useFetchOneStudentByTrackingIDMutation
 } = userApiSlice

@@ -44,6 +44,7 @@ const menuItems = [
     submenu: [
       { label: 'Add Student', link: '/partner/student/add' },
       { label: 'View Student', link: '/partner/student/view' },
+      {label:'Track Student' ,link: '/partner/student/track'},
     ],
   },
 ];

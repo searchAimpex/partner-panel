@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useCountryFetchMutation, useCreateStudentMutation, useFetchProvinceMutation, useFetchUniversityMutation } from '../../slices/adminApiSlice';
+import { useAllCourseMutation, useCountryFetchMutation, useCreateStudentMutation, useFetchProvinceMutation, useFetchUniversityMutation } from '../../slices/adminApiSlice';
 import './extra.css'; // Ensure you have this CSS file
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../../firebase';
@@ -56,9 +56,16 @@ export default function PartnerAddStudentScreen() {
     const [countries, setCountries] = useState([]);
     const [provinces, setProvinces] = useState([]);
     const [universities, setUniversities] = useState([]);
+    const [course, setCourse] = useState([]);
+
     const [filteredProvinces, setFilteredProvinces] = useState([]); // Filtered provinces based on selected country
-  
+    const [filters, setFilters] = useState({
+      university: '',
+     
+    });
     // Fetch mutations
+    const [AllCourse, { isLoading, isError }] = useAllCourseMutation();
+
     const [fetchCountries] = useCountryFetchMutation();
     const [fetchProvinces] = useFetchProvinceMutation();
     const [fetchUniversities] = useFetchUniversityMutation();
@@ -108,6 +115,13 @@ export default function PartnerAddStudentScreen() {
           if (response?.data) {
             setUniversities(response.data); // Set universities related to selected province
             updatedFormData.University = ''; // Reset university
+          }
+        }
+        if (name === 'University' && value) {
+          setFilters({university: value});
+          const response = await AllCourse(filters); // Pass selected province ID
+          if (response?.data) {
+            setCourse(response.data); // Set universities related to selected province
           }
         }
       
@@ -525,8 +539,12 @@ console.log("filterd university",universities)
                 required
                 disabled={!formData.University} // Disable until university is selected
               >
-                <option value="">Select a course</option>
-                {/* Add your course options here */}
+                  <option value="">Select a Course</option>
+                {course.map((university) => (
+                  <option key={university._id} value={university._id}>
+                    {university.ProgramName}
+                  </option>
+                ))}
               </select>
             </div>
           </>
