@@ -15,7 +15,7 @@ import {
 } from 'react-icons/fa';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Logo from '../../assets/SearchMyStudyLog.png';
+import Logo from '../../assets/SearchMyStudy.png';
 import Placeholder from '../../assets/Placeholder.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLogoutMutation } from '../../slices/userApiSlice';
@@ -138,7 +138,16 @@ export default function PartnerLayout() {
         }`}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between p-6">
+        <div className="flex items-center justify-between p-4">
+          { userInfo.Logo ? 
+               <img
+               className={`h-[60px] object-contain w-full ${
+                 isCollapsed ? 'hidden' : 'block'
+               }`}
+               src={userInfo.Logo}
+               alt="Logo"
+             />          
+          :
           <img
             className={`h-[60px] object-contain w-full ${
               isCollapsed ? 'hidden' : 'block'
@@ -146,25 +155,23 @@ export default function PartnerLayout() {
             src={Logo}
             alt="Logo"
           />
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
-          >
-            {isCollapsed ? (
-              <FaChevronRight size={20} className="text-gray-600" />
-            ) : (
-              <FaChevronLeft size={16} className="text-gray-600" />
-            )}
-          </button>
+        }
+       
         </div>
 
         {/* User Profile */}
-        <div className="flex flex-col items-center mt-8 mb-8">
+        <div className="flex flex-col items-center mt-4 mb-4">
+          { userInfo.Logo ? 
+           <img
+            src={userInfo.Logo}
+            alt="User"
+            className="w-12 h-12 rounded-full mb-2"
+          />   :
           <img
             src={Placeholder}
             alt="User"
             className="w-12 h-12 rounded-full mb-2"
-          />
+          />}
           <span className={`font-medium text-gray-800 ${isCollapsed ? 'hidden' : 'block'}`}>
             {userInfo?.name}
           </span>
@@ -237,7 +244,20 @@ export default function PartnerLayout() {
         {/* Navbar */}
         <header className="bg-white shadow-sm">
           <div className="flex items-center justify-between p-4">
+          <div>
+                <button
+                  onClick={() => setIsCollapsed(!isCollapsed)}
+                  className="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                >
+                  {isCollapsed ? (
+                    <FaChevronRight size={20} className="text-gray-600" />
+                  ) : (
+                    <FaChevronLeft size={16} className="text-gray-600" />
+                  )}
+                </button>
+              </div>
             <div className="relative w-full max-w-xs">
+              
               <div className="flex items-center bg-gray-100 rounded-lg px-4 py-2 focus-within:ring-2 focus-within:ring-blue-500">
                 <FaSearch size={20} className="text-gray-500" />
                 <input
@@ -339,7 +359,7 @@ export default function PartnerLayout() {
                     className="absolute mt-2 right-0 w-40 bg-white shadow-lg rounded-lg z-10 border border-gray-200"
                   >
                     <Link
-                      to="/profile"
+                      to="/partner/profile"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Profile

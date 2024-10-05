@@ -22,6 +22,6 @@ const initialState = {
 
 
   
-export const {  } = userSlice.actions;
+export const {AddExtraUser,FetchExtraUser  } = userSlice.actions;
 
 export default userSlice.reducer;

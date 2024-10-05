@@ -69,6 +69,8 @@ export default function PartnerViewUserScreen() {
               <tr className="bg-blue-500 text-white">
                 <th className="py-3 px-5 text-left">Name</th>
                 <th className="py-3 px-5 text-left">Email</th>
+                <th className="py-3 px-5 text-left">Password</th>
+
                 <th className="py-3 px-5 text-left">Role</th>
                 <th className="py-3 px-5 text-left">Created By</th>
                 <th className="py-3 px-5 text-left">Created At</th>
@@ -80,10 +82,11 @@ export default function PartnerViewUserScreen() {
                 <tr
                   key={user._id}
                   className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors duration-200`}>
-                  <td className="py-3 px-5">{user.name}</td>
-                  <td className="py-3 px-5">{user.email}</td>
-                  <td className="py-3 px-5">{user.role}</td>
-                  <td className="py-3 px-5">{user.createdBy?.name || 'N/A'}</td>
+                  <td className="py-3 px-5">{user?.name}</td>
+                  <td className="py-3 px-5">{user?.email}</td>
+                  <td className="py-3 px-5">{user?.passwordTracker}</td>
+                  <td className="py-3 px-5">{user?.role}</td>
+                  <td className="py-3 px-5">{user?.createdBy?.name || 'N/A'}</td>
                   <td className="py-3 px-5">{new Date(user.createdAt).toLocaleDateString()}</td>
                   <td className="py-3 px-5">
                     <label className="inline-flex items-center cursor-pointer">
