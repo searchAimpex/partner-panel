@@ -58,8 +58,11 @@ const router = createBrowserRouter(
       <Route element={<FrenchiseRoutes />}>
         <Route path=  '/frenchise/dashboard' element={<DashboardScreen/>} />
         <Route path=  '/frenchise/university' element={<PartnerUniversityScreen/>} />
+        <Route path = '/frenchise/university/:id' element = {<PartnerUniversityScreenDetailed />} />
+
         <Route path = '/frenchise/country' element = {< PartnerCountryScreen/>} />
         <Route path = '/frenchise/course' element = {< PartnerCourseScreen/>} />
+
         <Route path = '/frenchise/addUser' element = {< PartnerAddUserScreen/>} />
         <Route path = '/frenchise/viewUser' element = {< PartnerViewUserScreen/>} />
         <Route path = '/frenchise/notification' element= {<NotificationScreen />} />
@@ -73,6 +76,8 @@ const router = createBrowserRouter(
       <Route element={<CounsellerRoutes />}>
         <Route path=  '/counsellor/dashboard' element={<DashboardScreen/>} />
         <Route path=  '/counsellor/university' element={<PartnerUniversityScreen/>} />
+        <Route path = '/counsellor/university/:id' element = {<PartnerUniversityScreenDetailed />} />
+
         <Route path = '/counsellor/country' element = {< PartnerCountryScreen/>} />
         <Route path = '/counsellor/course' element = {< PartnerCourseScreen/>} />
 

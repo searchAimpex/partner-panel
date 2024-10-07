@@ -10,9 +10,22 @@ const PartnerCountryScreen = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState(''); // State for search term
   const dispatch = useDispatch();
+  const {userInfo} = useSelector(state=>state.auth)
   const { countries } = useSelector((state) => state.SecondCountry);
   const [CountryFetch] = useCountryGetMutation();
   const navigate = useNavigate();
+  const handlenavigate= (_id)=>{
+    console.log("execute")
+    if(userInfo.role=== 'partner'){
+    navigate(`/partner/country/${_id}`)
+    }
+    if(userInfo.role=== 'frenchise'){
+      navigate(`/frenchise/country/${_id}`)
+      }
+      if(userInfo.role=== 'counsellor'){
+        navigate(`/counsellor/country/${_id}`)
+        }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,7 +101,7 @@ const PartnerCountryScreen = () => {
                 <td className="px-4 py-2">
                   <button
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                    onClick={() => navigate(`/partner/country/${country._id}`)}
+                    onClick={() => handlenavigate(country._id)}
                   >
                     View
                   </button>

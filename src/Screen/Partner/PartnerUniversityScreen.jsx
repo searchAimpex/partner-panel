@@ -11,6 +11,21 @@ const PartnerUniversityScreen = () => {
   const dispatch = useDispatch();
   const { university } = useSelector(state => state.university);
   const [FetchUniversity, { isSuccess }] = useFetchUniversityMutation();
+  const {userInfo} = useSelector(state=>state.auth)
+ 
+  const handlenavigate= (_id)=>{
+    console.log("execute")
+    if(userInfo.role=== 'partner'){
+    navigate(`/partner/university/${_id}`)
+    }
+    if(userInfo.role=== 'frenchise'){
+      navigate(`/frenchise/university/${_id}`)
+      }
+      if(userInfo.role=== 'counsellor'){
+        navigate(`/counsellor/university/${_id}`)
+        }
+  }
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,7 +83,7 @@ const PartnerUniversityScreen = () => {
                 </td>
                 <td className="px-4 py-2">
                   <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                   onClick={() => navigate(`/partner/university/${uni._id}`)} // Navigate on click
+                   onClick={() =>handlenavigate(uni._id)} // Navigate on click
                   >
                     View
                   </button>

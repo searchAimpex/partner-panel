@@ -435,10 +435,7 @@ const PartnerCourseScreen = () => {
                             </div>
 
                             <div className='flex flex-row space-x-4'>
-                                <button 
-                                className='px-2 py-2 rounded-xl text-white font-bold bg-blue-main'
-                                onClick={(e)=>navigate(`/course/${course._id}`)}
-                                >View</button>
+                               
                                   <button 
                                 className='px-2 py-2 rounded-xl text-white font-bold bg-blue-main'
                                 onClick={(e)=>handleCampare(course)}
