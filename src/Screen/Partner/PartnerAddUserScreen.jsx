@@ -1,14 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { useAddUserMutation } from '../../slices/adminApiSlice';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { AddExtraUser } from '../../slices/userSlice'; // Assuming this exists
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import {app} from '../../firebase'; // Assuming your Firebase config is imported here
+
+const storage = getStorage(app);
 
 export default function PartnerAddUserScreen() {
-  // Access the createUser mutation
-  const [createUser,{isSuccess}] = useAddUserMutation();
+  const [createUser, { isSuccess }] = useAddUserMutation();
   const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const [profilePic, setProfilePic] = useState(null);
+
+  const uploadImage = async (file) => {
+    const storageRef = ref(storage, `profilePictures/${file.name}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    return url;
+  };
 
   // Validation schema for Formik using Yup
   const validationSchema = Yup.object().shape({
@@ -17,34 +30,42 @@ export default function PartnerAddUserScreen() {
     password: Yup.string()
       .min(6, 'Password must be at least 6 characters')
       .required('Password is required'),
-    
+    CounsellorCode: Yup.string(),
+    ProfilePhoto: Yup.string(),
+    WhatappNumber: Yup.string().matches(/^\+?\d{10,14}$/, 'Invalid WhatsApp number'),
   });
-  useEffect(()=>{
-    if(isSuccess){
-        toast.success('User created successfully!');
-  
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('User created successfully!');
     }
+  }, [isSuccess]);
 
-  },[isSuccess])
-
-  // Initial values for the form
   const initialValues = {
     name: '',
     email: '',
     password: '',
     role: 'counsellor',
-    createdBy:userInfo._id // Default role value
+    CounsellorCode: '',
+    ProfilePhoto: '',
+    WhatappNumber: '',
+    createdBy: userInfo._id,
   };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      // Trigger the mutation to create a new user
-      const res = await createUser(values).unwrap();
-      disaptch(AddExtraUser(res))
+      let profilePhotoUrl = values.ProfilePhoto;
+      if (profilePic) {
+        // Upload profile picture to Firebase if a file was selected
+        profilePhotoUrl = await uploadImage(profilePic);
+      }
+      // Include the uploaded profile photo URL in the values
+      const res = await createUser({ ...values, ProfilePhoto: profilePhotoUrl }).unwrap();
+      dispatch(AddExtraUser(res)); // Assuming this action exists
       toast.success('User created successfully!');
-      resetForm(); // Reset form after successful submission
+      resetForm();
     } catch (error) {
-      console.log("fsa",error)
+      console.log('Error:', error);
     } finally {
       setSubmitting(false);
     }
@@ -58,7 +79,7 @@ export default function PartnerAddUserScreen() {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, setFieldValue }) => (
           <Form>
             {/* Name Field */}
             <div className="mb-4">
@@ -100,6 +121,51 @@ export default function PartnerAddUserScreen() {
                 placeholder="Enter user password"
               />
               <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
+            </div>
+
+            {/* Counsellor Code Field */}
+            <div className="mb-4">
+              <label htmlFor="CounsellorCode" className="block text-sm font-medium text-gray-700">
+                Counsellor Code
+              </label>
+              <Field
+                type="text"
+                name="CounsellorCode"
+                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                placeholder="Enter counsellor code"
+              />
+              <ErrorMessage name="CounsellorCode" component="div" className="text-red-500 text-sm mt-1" />
+            </div>
+
+            {/* Profile Photo Upload */}
+            <div className="mb-4">
+              <label htmlFor="ProfilePhoto" className="block text-sm font-medium text-gray-700">
+                Profile Photo
+              </label>
+              <input
+                type="file"
+                name="ProfilePhoto"
+                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                onChange={(event) => {
+                  setProfilePic(event.target.files[0]);
+                  setFieldValue('ProfilePhoto', event.target.value);
+                }}
+              />
+              <ErrorMessage name="ProfilePhoto" component="div" className="text-red-500 text-sm mt-1" />
+            </div>
+
+            {/* WhatsApp Number Field */}
+            <div className="mb-4">
+              <label htmlFor="WhatappNumber" className="block text-sm font-medium text-gray-700">
+                WhatsApp Number
+              </label>
+              <Field
+                type="text"
+                name="WhatappNumber"
+                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                placeholder="Enter WhatsApp number"
+              />
+              <ErrorMessage name="WhatappNumber" component="div" className="text-red-500 text-sm mt-1" />
             </div>
 
             {/* Role Field */}

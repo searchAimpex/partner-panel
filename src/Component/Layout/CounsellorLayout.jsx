@@ -130,7 +130,17 @@ export default function CounsellorLayout() {
       >
         {/* Logo */}
         <div className="flex items-center justify-between p-4">
-          
+          { userInfo?.createdBy?.role === 'partner' ?
+             <img
+             className={`h-[60px] object-contain w-full ${
+               isCollapsed ? 'hidden' : 'block'
+             }`}
+             src={userInfo?.createdBy?.Logo}
+             alt="Logo"
+           />
+
+
+            :
           <img
             className={`h-[60px] object-contain w-full ${
               isCollapsed ? 'hidden' : 'block'
@@ -138,6 +148,7 @@ export default function CounsellorLayout() {
             src={Logo}
             alt="Logo"
           />
+        }
    
        
         </div>
@@ -146,7 +157,7 @@ export default function CounsellorLayout() {
         <div className="flex flex-col items-center mt-8 mb-8">
         
           <img
-            src={Placeholder}
+            src={userInfo?.ProfilePhoto}
             alt="User"
             className="w-12 h-12 rounded-full mb-2"
           />
