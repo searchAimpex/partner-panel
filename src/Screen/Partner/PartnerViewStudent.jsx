@@ -95,6 +95,7 @@ export default function PartnerViewStudent() {
                 <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg">
                     <thead>
                         <tr className="bg-gray-200 text-gray-700">
+                            <th className="py-3 px-4 border-b">Create By</th>
                             <th className="py-3 px-4 border-b">First Name</th>
                             <th className="py-3 px-4 border-b">Last Name</th>
                             <th className="py-3 px-4 border-b">Email</th>
@@ -109,6 +110,7 @@ export default function PartnerViewStudent() {
                     <tbody>
                         {currentStudents.map((std, index) => (
                             <tr key={index} className="hover:bg-gray-100">
+                                <td className="py-3 px-4 border-b">{std.User.name}</td>
                                 <td className="py-3 px-4 border-b">{std.firstName}</td>
                                 <td className="py-3 px-4 border-b">{std.lastName}</td>
                                 <td className="py-3 px-4 border-b">{std.emailID || "N/A"}</td>

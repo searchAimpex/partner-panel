@@ -13,6 +13,10 @@ const RedirectAfterLogin = () => {
   if (userInfo?.role === 'frenchise') {
     return <Navigate to="/frenchise/dashboard" replace />;
   }
+  if (userInfo?.role === 'counsellor') {
+    return <Navigate to="/counsellor/dashboard" replace />;
+  }
+
 
   return <Navigate to="/" replace />;
 };

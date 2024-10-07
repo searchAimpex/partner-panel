@@ -30,6 +30,7 @@ import StudentDetailedTrack from './Screen/Partner/StudentDetailedTrack.jsx';
 import PartnerTrackStudent from './Screen/Partner/PartnerTrackStudent.jsx';
 import PartnerProfile from './Screen/Partner/PartnerProfile.jsx';
 import FrenchiseProfileScreen from './Screen/Frenchise/FrenchiseProfileScreen.jsx';
+import CounsellerRoutes from './Component/Routes/CounsellerRoutes.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -68,6 +69,20 @@ const router = createBrowserRouter(
         <Route path = '/frenchise/student/:id' element = {<StudentDetailedTrack />} />
         <Route path = '/frenchise/student/track' element = {<PartnerTrackStudent />} />
         <Route path = '/frenchise/profile' element= {<FrenchiseProfileScreen />} />
+      </Route>
+      <Route element={<CounsellerRoutes />}>
+        <Route path=  '/counsellor/dashboard' element={<DashboardScreen/>} />
+        <Route path=  '/counsellor/university' element={<PartnerUniversityScreen/>} />
+        <Route path = '/counsellor/country' element = {< PartnerCountryScreen/>} />
+        <Route path = '/counsellor/course' element = {< PartnerCourseScreen/>} />
+
+        <Route path = '/counsellor/notification' element= {<NotificationScreen />} />
+        <Route path = '/counsellor/country/:id' element= {<PartnerCountryScreenDetailed />} />
+        <Route path = '/counsellor/student/add'  element={< PartnerAddStudentScreen />}/>
+        <Route path = '/counsellor/student/view' element = {<PartnerViewStudent />} />
+        <Route path = '/counsellor/student/:id' element = {<StudentDetailedTrack />} />
+        <Route path = '/counsellor/student/track' element = {<PartnerTrackStudent />} />
+       
       </Route>
     </Route>
   )
