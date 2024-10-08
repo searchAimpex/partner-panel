@@ -78,11 +78,11 @@ export default function PartnerTicketScreen() {
 
     const getStatusColor = (status) => {
         switch (status) {
-            case 'Open':
+            case 'open':
                 return 'bg-yellow-100 border-yellow-400';
-            case 'Closed':
+            case 'closed':
                 return 'bg-green-100 border-green-400';
-            case 'Pending':
+            case 'in-progress':
                 return 'bg-blue-100 border-blue-400';
             default:
                 return 'bg-gray-100 border-gray-300';
@@ -105,11 +105,11 @@ export default function PartnerTicketScreen() {
                                     {getStatusIcon(ticket.status)}
                                     <h3 className="text-lg font-semibold ml-2">{ticket.title}</h3>
                                 </div>
-                                <p className="text-gray-700 mt-1 font-medium">{ticket.description}</p>
+                                <p className="text-gray-700 mt-1 text-sm font-medium">{ticket?.description?.slice(0,20)}...</p>
                                 <div className="mt-2">
                                     <p className="text-gray-500"><strong>Priority:</strong> {ticket.priority}</p>
                                     <p className="text-gray-500"><strong>Category:</strong> {ticket.category}</p>
-                                    <p className="text-gray-500"><strong>Status:</strong> {ticket.status}</p>
+                                    <p className={getStatusColor(ticket.status)}><strong>Status:</strong> {ticket.status}</p>
                                 </div>
                                 <button
                                     onClick={() => handleOpenDialog(ticket)}
