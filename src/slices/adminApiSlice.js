@@ -78,6 +78,28 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 url: `${USERS_URL}/student/track/${id}`,
                 method: 'GET',
             }),
+        }),
+        CreateTicket : builder.mutation({
+            query:(data)=>({
+                url: `${USERS_URL}/ticket`,
+                method: 'POST',
+                body: data
+            }),
+        }),
+
+        GetOneTicket : builder.mutation({ 
+            query:(id)=>({
+                url: `${USERS_URL}/ticket/${id}`,
+                method: 'GET',
+            }),
+        }),
+        CreateResponseTicket:builder.mutation({
+            query: (data)=> ({
+                url:`${USERS_URL}/ticket/reply/${data.id}`,
+                method: 'POST',
+                body:data.raw
+            
+            }),
         })
 
 
@@ -88,5 +110,5 @@ export const userApiSlice = apiSlice.injectEndpoints({
 export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMutation,useFetchProvinceMutation,
     useAddUserMutation,useFetchUserMutation,useFetchNotifcationMutation,useFetchOneUniversityMutation,
     useCreateStudentMutation,useGetStudentByUserMutation,useFetchOneStudentMutation,
-    useFetchOneStudentByTrackingIDMutation
+    useFetchOneStudentByTrackingIDMutation,useCreateTicketMutation,useGetOneTicketMutation ,useCreateResponseTicketMutation
 } = userApiSlice

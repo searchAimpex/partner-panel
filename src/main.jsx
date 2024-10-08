@@ -31,6 +31,8 @@ import PartnerTrackStudent from './Screen/Partner/PartnerTrackStudent.jsx';
 import PartnerProfile from './Screen/Partner/PartnerProfile.jsx';
 import FrenchiseProfileScreen from './Screen/Frenchise/FrenchiseProfileScreen.jsx';
 import CounsellerRoutes from './Component/Routes/CounsellerRoutes.jsx';
+import PartnerTicketScreen from './Screen/Partner/PartnerTicketScreen.jsx';
+import PartnerTicketAddScreen from './Screen/Partner/PartnerTicketAddScreen.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -53,6 +55,9 @@ const router = createBrowserRouter(
         <Route path = '/partner/student/:id' element = {<StudentDetailedTrack />} />
         <Route path = '/partner/student/track' element = {<PartnerTrackStudent />} />
         <Route path='/partner/profile' element= {<PartnerProfile />} />
+        <Route path= '/partner/ticket/add' element= {<PartnerTicketAddScreen />} />
+        <Route path= '/partner/ticket/view' element= {<PartnerTicketScreen />} />
+
 
       </Route>
       <Route element={<FrenchiseRoutes />}>
