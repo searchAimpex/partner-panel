@@ -100,7 +100,21 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 body:data.raw
             
             }),
-        })
+        }),
+        StudentMatrix :builder.mutation({
+            query:(data)=>({
+                url: `${USERS_URL}/matrix/${data}`,
+                method: 'GET',
+            }),
+        }),
+        GetAllPromotional: builder.mutation({
+            query: () => ({
+              url: `${USERS_URL}/FetchAllPromotional`,
+              method: 'GET',
+
+            }),
+          }),
+
 
 
     })
@@ -110,5 +124,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
 export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMutation,useFetchProvinceMutation,
     useAddUserMutation,useFetchUserMutation,useFetchNotifcationMutation,useFetchOneUniversityMutation,
     useCreateStudentMutation,useGetStudentByUserMutation,useFetchOneStudentMutation,
-    useFetchOneStudentByTrackingIDMutation,useCreateTicketMutation,useGetOneTicketMutation ,useCreateResponseTicketMutation
+    useFetchOneStudentByTrackingIDMutation,useCreateTicketMutation,useGetOneTicketMutation ,useCreateResponseTicketMutation,
+    useStudentMatrixMutation,useGetAllPromotionalMutation
 } = userApiSlice

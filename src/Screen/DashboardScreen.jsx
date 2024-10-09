@@ -1,166 +1,359 @@
-import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import React, { useEffect, useState } from 'react';
+import { TrendingUp, Package, DollarSign, ThumbsUp, Users, FileText, Check, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useFetchUniversityMutation, useGetAllPromotionalMutation, useStudentMatrixMutation } from '../slices/adminApiSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { FetchPromotional } from '../slices/promotionalSlice';
+import { FetchUniversitys } from '../slices/universitySlice';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardScreen = () => {
-    const websiteMetricsData = [
-        { month: 'Jan', sessions: 3000, newUsers: 1500, pageViews: 2000 },
-        { month: 'Feb', sessions: 4000, newUsers: 2500, pageViews: 3000 },
-        { month: 'Mar', sessions: 5000, newUsers: 3500, pageViews: 4000 },
-        { month: 'Apr', sessions: 2000, newUsers: 1200, pageViews: 1500 },
-        { month: 'May', sessions: 1500, newUsers: 800, pageViews: 1000 },
-    ];
-
-    const topSellersData = [
-        { country: 'United States', flag: '🇺🇸', revenue: '$911,200', vsLastMonth: '+60%', goalReached: 25 },
-        { country: 'Austria', flag: '🇦🇹', revenue: '$821,600', vsLastMonth: '-40%', goalReached: 50 },
-        { country: 'France', flag: '🇫🇷', revenue: '$323,700', vsLastMonth: '+40%', goalReached: 10 },
-        { country: 'Germany', flag: '🇩🇪', revenue: '$833,205', vsLastMonth: '-80%', goalReached: 70 },
-        { country: 'United Arab Emirates', flag: '🇦🇪', revenue: '$232,243', vsLastMonth: '+80%', goalReached: 0 },
-    ];
-
-    const overallRating = {
-        rating: 4.3,
-        totalReviews: 186,
-        stars: {
-            5: 80,
-            4: 45,
-            3: 30,
-            2: 8,
-            1: 1
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const [StudentMatrix] = useStudentMatrixMutation()
+    const {userInfo} = useSelector(state => state.auth)
+    const {promotional} = useSelector(state=> state.promotional)
+    const [rawData,setRawData] = useState()
+    const { university } = useSelector(state => state.university);
+    const [FetchUniversity, { isSuccess }] = useFetchUniversityMutation();
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const result = await FetchUniversity().unwrap();
+            dispatch(FetchUniversitys(result));
+          } catch (error) {
+            console.error('Failed to fetch universities:', error);
+          }
+        };
+        fetchData();
+      }, [FetchUniversity, dispatch]);
+    const [formData, setFormData] = useState({
+        date: '',
+        time: ''
+    });
+    const [GetAllPromotional] = useGetAllPromotionalMutation()
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const res = await GetAllPromotional();
+      
+            dispatch(FetchPromotional(res.data));
+          } catch (error) {
+            toast.error('Failed to fetch data');
+          }
+        };
+    
+        fetchData();
+      }, [GetAllPromotional]);
+       // Sample university data
+       const universities = [
+        {
+            id: 1,
+            image: "/api/placeholder/400/300",
+            name: "Amity University Dubai",
+            criteria: {
+                academic: "50%",
+                english: "NO IELTS",
+                age: "ANY GAP"
+            }
         },
-        category: {
-            workManagement: 4.3,
-            salaryCulture: 3.5
-        }
+        {
+            id: 2,
+            image: "/api/placeholder/400/300",
+            name: "University 2",
+            criteria: {
+                academic: "60%",
+                english: "NO IELTS",
+                age: "ANY GAP"
+            }
+        },
+        {
+            id: 3,
+            image: "/api/placeholder/400/300",
+            name: "Amity University Dubai 3",
+            criteria: {
+                academic: "50%",
+                english: "NO IELTS",
+                age: "ANY GAP"
+            }
+        },
+        {
+            id: 4,
+            image: "/api/placeholder/400/300",
+            name: "University 5",
+            criteria: {
+                academic: "60%",
+                english: "NO IELTS",
+                age: "ANY GAP"
+            }
+        },
+        // Add more universities as needed
+    ];
+
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [currentSlide1, setCurrentSlide1] = useState(0);
+
+    const nextSlide = () => {
+        setCurrentSlide(curr => 
+            curr >= Math.ceil(universities.length/2) - 1 ? 0 : curr + 1
+        );
+    };
+    
+
+    const prevSlide = () => {
+        setCurrentSlide(curr => 
+            curr === 0 ? Math.ceil(universities.length/2) - 1 : curr - 1
+        );
+    };
+    const nextSlide1 = () => {
+        setCurrentSlide1(curr => 
+            curr >= Math.ceil(promotional.length/2) - 1 ? 0 : curr + 1
+        );
     };
 
+    const prevSlide1 = () => {
+        setCurrentSlide1(curr => 
+            curr === 0 ? Math.ceil(promotional.length/2) - 1 : curr - 1
+        );
+    };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = userInfo._id;
+                const res = await StudentMatrix(data).unwrap();
+                setRawData(res)
+           } catch (error) {
+                toast.error("Failed to fetch student data");
+            }
+        };
+
+        fetchData();
+    }, [StudentMatrix, userInfo._id, dispatch]);
+
+    console.log("Data",rawData)
+    // Top metrics data
+    const topMetrics = [
+        { title: 'All Students', value: rawData?.totalStudents, icon: Users, color: 'bg-blue-100' },
+        { title: 'Offers Received', value: rawData?.totalOffers, icon: Package, color: 'bg-cyan-100' },
+        { title: 'Fees Paid', value:  rawData?.totalFeesPaid, icon: DollarSign, color: 'bg-orange-100' },
+        { title: 'Visa Received', value:  rawData?.totalVisaApproved, icon: ThumbsUp, color: 'bg-green-100' }
+    ];
+
+    // Assessment metrics
+    const assessmentMetrics = [
+        { title: 'Total Assessments', value: '0', icon: FileText },
+        { title: 'Assessments Shared', value: '0', icon: Users },
+        { title: 'Assessments Pending', value: '0', icon: Clock },
+        { title: 'Application Submitted', value: '0', icon: Check }
+    ];
+
+    // Handle modal open/close
+    const handleModalToggle = () => setIsModalOpen(!isModalOpen);
+
+    // Handle form input change
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    // Handle form submit (you can add your logic here)
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        console.log('Form Data:', formData);
+        // Close modal after submission
+        setIsModalOpen(false);
+    };
+    const handlenavigate= ()=>{
+        console.log("execute")
+        if(userInfo.role=== 'partner'){
+        navigate(`/partner/key`)
+        }
+        if(userInfo.role=== 'frenchise'){
+          navigate(`/frenchise/key`)
+          }
+          if(userInfo.role=== 'counsellor'){
+            navigate(`/counsellor/key`)
+            }
+      }
+      const handlenavigate1= ()=>{
+        console.log("execute")
+        if(userInfo.role=== 'partner'){
+        navigate(`/partner/university`)
+        }
+        if(userInfo.role=== 'frenchise'){
+          navigate(`/frenchise/university`)
+          }
+          if(userInfo.role=== 'counsellor'){
+            navigate(`/counsellor/university`)
+            }
+      }
     return (
-        <div className="dashboard bg-gray-100 p-8">
-            {/* Header */}
-            <div className="header text-2xl font-bold mb-4">
-                <h1>Hi, welcome back!</h1>
-                <p className="text-sm text-gray-500">April 1, 2019</p>
+        <div className="p-8 bg-gray-50 min-h-screen">
+            {/* Top Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                {topMetrics.map((metric, index) => (
+                    <div key={index} className="p-6 bg-white shadow-sm">
+                        <div className="flex items-start justify-between">
+                            <div>
+                                <h3 className="text-gray-600 font-medium mb-2">{metric.title}</h3>
+                                <p className="text-2xl font-semibold">{metric.value}</p>
+                            </div>
+                            <div className={`${metric.color} p-3 rounded-lg`}>
+                                <metric.icon className="w-5 h-5" />
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </div>
 
-            {/* Cards Container */}
-            <div className="dashboard-cards grid grid-cols-3 gap-6">
-                {/* Customer Card */}
-                <div className="card bg-white p-6 rounded shadow-md">
-                    <h3 className="text-xl font-semibold">Customers</h3>
-                    <p className="text-sm text-gray-500">23% increase in conversion</p>
-                    <h2 className="text-4xl font-bold mt-2">43,981</h2>
+            {/* Book Training Section */}
+            <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
+                <div className="flex justify-between items-center">
+                    <h2 className="text-xl font-semibold">Book My Training</h2>
+                    <button
+                        className="bg-blue-900 text-white px-6 py-2 rounded-md"
+                        onClick={handleModalToggle}
+                    >
+                        Book Now
+                    </button>
                 </div>
+            </div>
 
-                {/* Orders Card */}
-                <div className="card bg-white p-6 rounded shadow-md">
-                    <h3 className="text-xl font-semibold">Orders</h3>
-                    <p className="text-sm text-gray-500">6% decrease in earnings</p>
-                    <h2 className="text-4xl font-bold mt-2">55,543</h2>
-                </div>
+         {/* University Carousel */}
+<div className="mb-8 w-full flex  flex-row space-x-5">
+    <div className="relative w-1/3 shadow-xl">
+        <div className="overflow-hidden p-2">
+            <div className="grid grid-cols-1 gap-6">
+                {promotional.slice(currentSlide, currentSlide + 1).map((uni) => (
+                    <div key={uni.id} className="bg-white rounded-lg overflow-hidden shadow-sm">
+                        <div className="relative">
+                            <img 
+                                src={uni.imageURL} 
+                                alt={uni.name}
+                                className="w-full h-[500px] object-contained" // Adjust the height as needed
+                            />
+                        </div>
+                        <div className="">
+                            <button
+                            onClick={()=>handlenavigate()} 
+                            className="w-full mt-2 bg-blue-900 text-white rounded-md hover:bg-blue-800">
+                                View All
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+        <button 
+            onClick={prevSlide1}
+            className="absolute left-0 top-1/2 -translate-y-1/2  p-2 text-white rounded-full shadow-lg"
+        >
+            <ChevronLeft className="w-6 h-6" />
+        </button>
+        <button 
+            onClick={nextSlide1}
+            className="absolute right-0 top-1/2 -translate-y-1/2  p-2 text-white rounded-full shadow-lg"
+        >
+            <ChevronRight className="w-6 h-6" />
+        </button>
+    </div>
+    <div className='w-2/3'>
+    <div className="relative shadow-xl">
+        <div className="overflow-hidden p-2">
+            <div className="grid grid-cols-1 gap-6">
+                {university?.slice(currentSlide, currentSlide + 1).map((uni) => (
+                    <div key={uni.id} className="bg-white rounded-lg overflow-hidden shadow-sm">
+                        <div className="relative">
+                            <img 
+                                src={uni?.heroURL} 
+                                className="w-full h-[500px] object-cover" // Adjust the height as needed
+                            />
+                        </div>
+                        <div className="">
+                            <button
+                            onClick={()=>handlenavigate1()}
+                            className="w-full mt-2 bg-blue-900 text-white rounded-md hover:bg-blue-800">
+                                View All
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+        <button 
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-2 text-black rounded-full shadow-lg"
+        >
+            <ChevronLeft className="w-6 h-6" />
+        </button>
+        <button 
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-2 text-black rounded-full shadow-lg"
+        >
+            <ChevronRight className="w-6 h-6" />
+        </button>
+    </div>
 
-                {/* Website Audience Metrics Card with Chart */}
-                <div className="card bg-white p-6 rounded shadow-md">
-                    <h3 className="text-xl font-semibold mb-2">Website Audience Metrics</h3>
-                    <BarChart width={300} height={250} data={websiteMetricsData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="month" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="sessions" fill="#8884d8" />
-                        <Bar dataKey="newUsers" fill="#82ca9d" />
-                        <Bar dataKey="pageViews" fill="#ffc658" />
-                    </BarChart>
-                </div>
+    </div>
+</div>
 
-                {/* Market Trends Card */}
-                <div className="card bg-white p-6 rounded shadow-md">
-                    <h3 className="text-xl font-semibold">Market Trends</h3>
-                    <p className="text-sm text-gray-500">Total Income: $83,320</p>
-                    <p className="text-sm text-gray-500">Total Expenses: $32,370</p>
-                </div>
 
-                {/* Traffic Sources Card */}
-                <div className="card bg-white p-6 rounded shadow-md">
-                    <h3 className="text-xl font-semibold">Traffic Sources</h3>
-                    <p className="text-sm text-gray-500">4453 Leads</p>
-                    <div className="traffic-bar mt-4">
-                        <div className="bg-red-500 w-1/3 h-2 inline-block"></div>
-                        <div className="bg-blue-500 w-1/4 h-2 inline-block"></div>
-                        <div className="bg-green-500 w-1/5 h-2 inline-block"></div>
-                        {/* Add other bars */}
+            {/* Modal */}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                        <h3 className="text-lg font-semibold mb-4">Book Training</h3>
+                        <form onSubmit={handleFormSubmit}>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2" htmlFor="date">
+                                    Select Date
+                                </label>
+                                <input
+                                    type="date"
+                                    name="date"
+                                    id="date"
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                    value={formData.date}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2" htmlFor="time">
+                                    Select Time
+                                </label>
+                                <input
+                                    type="time"
+                                    name="time"
+                                    id="time"
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                    value={formData.time}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="flex justify-end space-x-2">
+                                <button
+                                    type="button"
+                                    className="bg-gray-300 px-4 py-2 rounded"
+                                    onClick={handleModalToggle}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="bg-blue-900 text-white px-4 py-2 rounded"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+            )}
 
-                {/* Recent Activity Card */}
-                <div className="card bg-white p-6 rounded shadow-md">
-                    <h3 className="text-xl font-semibold">Recent Activity</h3>
-                    <p className="text-sm text-gray-500">Deposit has updated to Paid: $325</p>
-                    <p className="text-sm text-gray-500">Your Withdrawal Proceeded: $4987</p>
-                </div>
-            </div>
+          
 
-            {/* Top Sellers Table */}
-            <div className="top-sellers bg-white p-6 mt-6 rounded shadow-md">
-                <h3 className="text-xl font-semibold mb-2">Top Sellers</h3>
-                <table className="w-full text-left">
-                    <thead>
-                        <tr>
-                            <th className="px-4 py-2">Country</th>
-                            <th className="px-4 py-2">Revenue</th>
-                            <th className="px-4 py-2">Vs Last Month</th>
-                            <th className="px-4 py-2">Goal Reached</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {topSellersData.map((seller, index) => (
-                            <tr key={index} className="border-t">
-                                <td className="px-4 py-2">{seller.flag} {seller.country}</td>
-                                <td className="px-4 py-2">{seller.revenue}</td>
-                                <td className="px-4 py-2">
-                                    <span className={seller.vsLastMonth.includes('+') ? 'text-green-500' : 'text-red-500'}>
-                                        {seller.vsLastMonth}
-                                    </span>
-                                </td>
-                                <td className="px-4 py-2">
-                                    <div className="relative w-full bg-gray-200 h-4 rounded">
-                                        <div
-                                            className="absolute top-0 left-0 h-4 bg-blue-500 rounded"
-                                            style={{ width: `${seller.goalReached}%` }}
-                                        ></div>
-                                    </div>
-                                    <span className="text-sm">{seller.goalReached}%</span>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Overall Rating Section */}
-            <div className="overall-rating bg-white p-6 mt-6 rounded shadow-md">
-                <h3 className="text-xl font-semibold">Overall Rating</h3>
-                <p className="text-lg">{overallRating.rating} ★</p>
-                <p className="text-sm text-gray-500">Based on {overallRating.totalReviews} reviews</p>
-                <div className="rating-breakdown">
-                    {Object.keys(overallRating.stars).map((star, index) => (
-                        <div key={index} className="flex items-center mb-2">
-                            <span className="mr-2">{star}★</span>
-                            <div className="relative w-full bg-gray-200 h-4 rounded">
-                                <div
-                                    className="absolute top-0 left-0 h-4 bg-yellow-500 rounded"
-                                    style={{ width: `${overallRating.stars[star]}%` }}
-                                ></div>
-                            </div>
-                            <span className="text-sm ml-2">{overallRating.stars[star]}%</span>
-                        </div>
-                    ))}
-                </div>
-                <div className="rating-category mt-4">
-                    <p className="text-sm">4.3 ★ Work/Management</p>
-                    <p className="text-sm">3.5 ★ Salary/Culture</p>
-                </div>
-            </div>
         </div>
     );
 };

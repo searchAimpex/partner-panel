@@ -33,6 +33,7 @@ import FrenchiseProfileScreen from './Screen/Frenchise/FrenchiseProfileScreen.js
 import CounsellerRoutes from './Component/Routes/CounsellerRoutes.jsx';
 import PartnerTicketScreen from './Screen/Partner/PartnerTicketScreen.jsx';
 import PartnerTicketAddScreen from './Screen/Partner/PartnerTicketAddScreen.jsx';
+import PartnerKey from './Screen/Partner/PartnerKey.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -57,6 +58,7 @@ const router = createBrowserRouter(
         <Route path='/partner/profile' element= {<PartnerProfile />} />
         <Route path= '/partner/ticket/add' element= {<PartnerTicketAddScreen />} />
         <Route path= '/partner/ticket/view' element= {<PartnerTicketScreen />} />
+        <Route path= '/partner/key' element = {<PartnerKey />} />
 
 
       </Route>
@@ -77,6 +79,9 @@ const router = createBrowserRouter(
         <Route path = '/frenchise/student/:id' element = {<StudentDetailedTrack />} />
         <Route path = '/frenchise/student/track' element = {<PartnerTrackStudent />} />
         <Route path = '/frenchise/profile' element= {<FrenchiseProfileScreen />} />
+        <Route path= '/frenchise/ticket/add' element= {<PartnerTicketAddScreen />} />
+        <Route path= '/frenchise/ticket/view' element= {<PartnerTicketScreen />} />
+        <Route path= '/frenchise/key' element = {<PartnerKey />} />
       </Route>
       <Route element={<CounsellerRoutes />}>
         <Route path=  '/counsellor/dashboard' element={<DashboardScreen/>} />
@@ -92,6 +97,9 @@ const router = createBrowserRouter(
         <Route path = '/counsellor/student/view' element = {<PartnerViewStudent />} />
         <Route path = '/counsellor/student/:id' element = {<StudentDetailedTrack />} />
         <Route path = '/counsellor/student/track' element = {<PartnerTrackStudent />} />
+        <Route path= '/counsellor/ticket/add' element= {<PartnerTicketAddScreen />} />
+        <Route path= '/counsellor/ticket/view' element= {<PartnerTicketScreen />} />
+        <Route path= '/counsellor/key' element = {<PartnerKey />} />
        
       </Route>
     </Route>
