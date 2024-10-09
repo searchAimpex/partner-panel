@@ -37,7 +37,7 @@ export default function PartnerKey() {
         <div className="p-8 bg-gray-50 min-h-screen">
             <h2 className="text-2xl font-semibold mb-6">Key highlights</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {promotional.map((item) => (
+                {promotional?.map((item) => (
                     <div
                         key={item.id}
                         className="relative bg-white rounded-lg overflow-hidden shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl"
