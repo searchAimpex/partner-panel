@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { TrendingUp, Package, DollarSign, ThumbsUp, Users, FileText, Check, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { TrendingUp, Package, DollarSign, ThumbsUp, Users, FileText, Check, Clock, ChevronLeft, ChevronRight, MailIcon, PhoneIcon } from 'lucide-react';
 import { useFetchUniversityMutation, useGetAllPromotionalMutation, useStudentMatrixMutation } from '../slices/adminApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FetchPromotional } from '../slices/promotionalSlice';
 import { FetchUniversitys } from '../slices/universitySlice';
 import { useNavigate } from 'react-router-dom';
+import UniversitySlider from '../Component/UniversitySlider';
 
 const DashboardScreen = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -89,6 +90,32 @@ const DashboardScreen = () => {
         },
         // Add more universities as needed
     ];
+    const contact = [
+        {
+            name: "John Doe",
+            postion:"admin",
+            email: "john.doe@example.com",
+            phone: "+1 123 456 7890",
+            image: ""
+        },
+        {
+            name: "Jane Smith",
+            postion:"admin",
+            email: "jane.smith@example.com",
+            phone: "+1 987 654 3210",
+            image: ""
+
+        },
+        {
+            name: "Jane Smith",
+            postion:"sub admin",
+            email: "jane.smith@example.com",
+            phone: "+1 987 654 3210",
+            image: ""
+
+        },
+        // Add more contacts as needed
+    ]
 
     const [currentSlide, setCurrentSlide] = useState(0);
     const [currentSlide1, setCurrentSlide1] = useState(0);
@@ -260,41 +287,50 @@ const DashboardScreen = () => {
     <div className='w-2/3'>
     <div className="relative shadow-xl">
         <div className="overflow-hidden p-2">
-            <div className="grid grid-cols-1 gap-6">
-                {university?.slice(currentSlide, currentSlide + 1).map((uni) => (
-                    <div key={uni.id} className="bg-white rounded-lg overflow-hidden shadow-sm">
-                        <div className="relative">
-                            <img 
-                                src={uni?.heroURL} 
-                                className="w-full h-[500px] object-cover" // Adjust the height as needed
-                            />
-                        </div>
-                        <div className="">
-                            <button
-                            onClick={()=>handlenavigate1()}
-                            className="w-full mt-2 bg-blue-900 text-white rounded-md hover:bg-blue-800">
-                                View All
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <UniversitySlider university = {university} />
         </div>
-        <button 
-            onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-2 text-black rounded-full shadow-lg"
-        >
-            <ChevronLeft className="w-6 h-6" />
-        </button>
-        <button 
-            onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-2 text-black rounded-full shadow-lg"
-        >
-            <ChevronRight className="w-6 h-6" />
-        </button>
+  
     </div>
 
     </div>
+</div>
+<div>
+    <div>
+        <span className="text-xl font-semibold">Point of contact</span>
+    </div>
+    <div className='grid grid-cols-3 gap-8'>
+        {contact?.map((item)=>{
+         return   (
+            <div className="bg-white shadow-lg rounded-lg p-6 transition-transform duration-200 transform hover:scale-105">
+                <div className="flex items-start">
+                    <img 
+                        src={item.imageUrl} 
+                        alt={item.name} 
+                        className="w-16 h-16 rounded-full mr-4" 
+                    />
+                    <div className="flex-1">
+                        <h3 className="text-gray-800 font-semibold text-lg mb-1">{item.name}</h3>
+                        <p className="text-gray-600 text-sm mb-2">{item.postion}</p>
+                        <div className="flex flex-col items-start">
+                            <a href={`mailto:${item.email}`} className="flex items-start justify-start text-blue-500 hover:text-blue-700 transition-colors">
+                                <MailIcon className="w-5 h-5" />
+                                <span className="ml-1">{item.email}</span>
+                            </a>
+                            <a href={`tel:${item.phone}`} className="flex items-start justify-start text-blue-500 hover:text-blue-700 transition-colors">
+                                <PhoneIcon className="w-5 h-5" />
+                                <span className="ml-1">{item.phone}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <hr className="border-t border-gray-200 my-4" />
+            </div>
+
+        
+            )
+        })}
+    </div>
+
 </div>
 
 

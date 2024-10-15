@@ -34,6 +34,7 @@ import CounsellerRoutes from './Component/Routes/CounsellerRoutes.jsx';
 import PartnerTicketScreen from './Screen/Partner/PartnerTicketScreen.jsx';
 import PartnerTicketAddScreen from './Screen/Partner/PartnerTicketAddScreen.jsx';
 import PartnerKey from './Screen/Partner/PartnerKey.jsx';
+import PartnerCreateProfile from './Screen/Partner/PartnerCreateProfile.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -55,10 +56,11 @@ const router = createBrowserRouter(
         <Route path = '/partner/student/view' element = {<PartnerViewStudent />} />
         <Route path = '/partner/student/:id' element = {<StudentDetailedTrack />} />
         <Route path = '/partner/student/track' element = {<PartnerTrackStudent />} />
-        <Route path='/partner/profile' element= {<PartnerProfile />} />
-        <Route path= '/partner/ticket/add' element= {<PartnerTicketAddScreen />} />
-        <Route path= '/partner/ticket/view' element= {<PartnerTicketScreen />} />
-        <Route path= '/partner/key' element = {<PartnerKey />} />
+        <Route path = '/partner/profile' element= {<PartnerProfile />} />
+        <Route path = '/partner/ticket/add' element= {<PartnerTicketAddScreen />} />
+        <Route path = '/partner/ticket/view' element= {<PartnerTicketScreen />} />
+        <Route path = '/partner/key' element = {<PartnerKey />} />
+        <Route path = '/partner/profile/create' element = {<PartnerCreateProfile />} />
 
 
       </Route>

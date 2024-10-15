@@ -57,6 +57,15 @@ const menuItems = [
       { label: 'View Ticket', link: '/partner/ticket/view' },
     ],
   },
+  {
+    icon: FaTicket,
+    label: 'Profile Assessment',
+    hasSubmenu: true,
+    submenu: [
+      { label: 'Add Assessment', link: '/partner/profile/create' },
+   
+    ],
+  },
 ];
 
 export default function PartnerLayout() {
