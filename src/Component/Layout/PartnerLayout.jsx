@@ -62,7 +62,8 @@ const menuItems = [
     label: 'Profile Assessment',
     hasSubmenu: true,
     submenu: [
-      { label: 'Add Assessment', link: '/partner/profile/create' },
+      { label: 'Add  Assessment',  link: '/partner/profile/create' },
+      { label: 'View Assessment', link: '/partner/assessment/view'}
    
     ],
   },

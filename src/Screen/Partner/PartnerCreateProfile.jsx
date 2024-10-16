@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAllCourseMutation, useCountryFetchMutation, useCreateStudentMutation, useFetchProvinceMutation, useFetchUniversityMutation } from '../../slices/adminApiSlice';
+import { useAllCourseMutation, useCountryFetchMutation, useCreateAssessmentMutation, useCreateStudentMutation, useFetchProvinceMutation, useFetchUniversityMutation } from '../../slices/adminApiSlice';
 import './extra.css'; // Ensure you have this CSS file
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../../firebase';
@@ -7,6 +7,36 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 const steps = ['Personal Details', 'Contact Details', 'Course Details', 'Documents'];
 const storage = getStorage(app);
+
+const categories = [
+  'Arts',
+  'Accounts',
+  'Finance',
+  'Marketing',
+  'Science',
+  'Medical',
+  'Computers',
+  'Engineering',
+  'Law',
+  'Education',
+  'Social Sciences',
+  'Business Administration',
+  'Psychology',
+  'Economics',
+  'Architecture',
+  'Environmental Science',
+  'Nursing',
+  'Hospitality Management',
+  'Media and Communication',
+  'Information Technology',
+  'Pharmacy',
+  'Agriculture',
+  'Design',
+  'Public Health',
+  'Mathematics',
+  'Data Science',
+  'Artificial Intelligence'
+];
 
 const StepTracker = ({ steps, activeStep }) => {
     return (
@@ -44,7 +74,7 @@ const StepTracker = ({ steps, activeStep }) => {
     );
   };
 export default function PartnerCreateProfile() {
-    const [createStudent,{isSuccess}] = useCreateStudentMutation();
+    const [CreateAssessment,{isSuccess}] = useCreateAssessmentMutation();
     const [activeStep, setActiveStep] = useState(0);
     const {userInfo} = useSelector(state=>state.auth);
     const [countries, setCountries] = useState([]);
@@ -55,12 +85,13 @@ export default function PartnerCreateProfile() {
     const [filters, setFilters] = useState({
       university: '',
     });
-    // Fetch mutations
     const [AllCourse, { isLoading, isError }] = useAllCourseMutation();
 
     const [fetchCountries] = useCountryFetchMutation();
     const [fetchProvinces] = useFetchProvinceMutation();
-    const [fetchUniversities] = useFetchUniversityMutation();
+    const [fetchUniversities] = useFetchUniversityMutation(); 
+    const [hasPassport, setHasPassport] = useState(false);
+
   
     // Fetch countries and provinces on component mount
     useEffect(() => {
@@ -152,7 +183,6 @@ export default function PartnerCreateProfile() {
     gradesInLastYear:'',
     english12Grade:'',
     englishTest:'',
-    workExperience:'',
     remarks:'',
     mobileNumber: '',
     emailID: '',
@@ -200,7 +230,7 @@ const handleBack = () => {
     event.preventDefault();
     try {
         // console.log("submit data",formData)
-      await createStudent(formData).unwrap();
+      await CreateAssessment(formData).unwrap();
       // Handle success (e.g., show a success message, redirect)
     } catch (err) {
       // Handle error (e.g., show error message)
@@ -233,7 +263,6 @@ console.log("filterd university",universities)
                 onChange={handleInputChange}
                 required
               />
-                 {formErrors.firstName && <span className="error">{formErrors.firstName}</span>}
             </div>
 
             <div className="form-group">
@@ -256,8 +285,15 @@ console.log("filterd university",universities)
                 onChange={handleInputChange}
                 required
               />
-              {formErrors.lastName && <span className="error">{formErrors.lastName}</span>}
             </div>
+            <div className="form-group">
+                <label> I have a passport</label>
+                  <input
+                    type="checkbox"
+                    checked={hasPassport}
+                    onChange={() => setHasPassport(!hasPassport)}
+                  />
+              </div>
             <div className="form-group">
               <label htmlFor="passportNumber">Passport No / Profile Evaluation UID *</label>
               <input
@@ -266,6 +302,7 @@ console.log("filterd university",universities)
                 name="passportNumber"
                 value={formData.passportNumber}
                 onChange={handleInputChange}
+                disabled= {!hasPassport}
                 required
               />
             </div>
@@ -342,8 +379,12 @@ console.log("filterd university",universities)
                 <option value="">Select Education Level</option>
                 <option value="10th">10th</option>
                 <option value="12th">12th</option>
-                <option value="Bachelors">Bachelors</option>
-                <option value="Masters">Masters</option>
+                <option value="BACHELOR DEGREE">BACHELOR DEGREE</option>
+                <option value="MASTER DEGREE">MASTER DEGREE</option>
+                <option value="DIPLOMA 10+3">DIPLOMA 10+3</option>
+                <option value="BACHELOR IN TECHNOLOGY">BACHELOR IN TECHNOLOGY</option>
+                <option value="MASTER IN TECHNOLOGY">MASTER IN TECHNOLOGY</option>
+                <option value="POST GRADUATE">POST GRADUATE</option>
               </select>
             </div>
             <div className="form-group">
@@ -413,14 +454,12 @@ console.log("filterd university",universities)
                 value={formData.Course}
                 onChange={handleInputChange2}
                 required
-                disabled={!formData.University} // Disable until university is selected
               >
-                  <option value="">Select a Course</option>
-                {course.map((university) => (
-                  <option key={university._id} value={university._id}>
-                    {university.ProgramName}
+                {categories.map((category, index) => (
+                  <option key={index} value={category}>
+                    {category}
                   </option>
-                ))}
+              ))}
               </select>
             </div>
           </>

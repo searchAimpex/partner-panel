@@ -35,6 +35,7 @@ import PartnerTicketScreen from './Screen/Partner/PartnerTicketScreen.jsx';
 import PartnerTicketAddScreen from './Screen/Partner/PartnerTicketAddScreen.jsx';
 import PartnerKey from './Screen/Partner/PartnerKey.jsx';
 import PartnerCreateProfile from './Screen/Partner/PartnerCreateProfile.jsx';
+import PartnerAssessmentView from './Screen/Partner/PartnerAssessmentView.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -61,8 +62,7 @@ const router = createBrowserRouter(
         <Route path = '/partner/ticket/view' element= {<PartnerTicketScreen />} />
         <Route path = '/partner/key' element = {<PartnerKey />} />
         <Route path = '/partner/profile/create' element = {<PartnerCreateProfile />} />
-
-
+        <Route path = '/partner/assessment/view' element = {< PartnerAssessmentView/>} />
       </Route>
       <Route element={<FrenchiseRoutes />}>
         <Route path=  '/frenchise/dashboard' element={<DashboardScreen/>} />
@@ -89,10 +89,8 @@ const router = createBrowserRouter(
         <Route path=  '/counsellor/dashboard' element={<DashboardScreen/>} />
         <Route path=  '/counsellor/university' element={<PartnerUniversityScreen/>} />
         <Route path = '/counsellor/university/:id' element = {<PartnerUniversityScreenDetailed />} />
-
         <Route path = '/counsellor/country' element = {< PartnerCountryScreen/>} />
         <Route path = '/counsellor/course' element = {< PartnerCourseScreen/>} />
-
         <Route path = '/counsellor/notification' element= {<NotificationScreen />} />
         <Route path = '/counsellor/country/:id' element= {<PartnerCountryScreenDetailed />} />
         <Route path = '/counsellor/student/add'  element={< PartnerAddStudentScreen />}/>

@@ -114,9 +114,19 @@ export const userApiSlice = apiSlice.injectEndpoints({
 
             }),
           }),
-
-
-
+        CreateAssessment: builder.mutation({
+            query: (data)=> ({
+                url: `${USERS_URL}/profile`,
+                method: 'POST',
+                body: data
+            }),
+        }),
+        GetAssessmentByUser: builder.mutation({
+            query:(id)=>({
+                url: `${USERS_URL}/profile/${id}`,
+                method: 'GET',
+            }),
+        }),
     })
 
 });
@@ -125,5 +135,5 @@ export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMut
     useAddUserMutation,useFetchUserMutation,useFetchNotifcationMutation,useFetchOneUniversityMutation,
     useCreateStudentMutation,useGetStudentByUserMutation,useFetchOneStudentMutation,
     useFetchOneStudentByTrackingIDMutation,useCreateTicketMutation,useGetOneTicketMutation ,useCreateResponseTicketMutation,
-    useStudentMatrixMutation,useGetAllPromotionalMutation
+    useStudentMatrixMutation,useGetAllPromotionalMutation,useCreateAssessmentMutation,useGetAssessmentByUserMutation
 } = userApiSlice
