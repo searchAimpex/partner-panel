@@ -17,6 +17,9 @@ export default function PartnerAssessmentView() {
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
 
+    const [selectedAssessment, setSelectedAssessment] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -60,16 +63,41 @@ export default function PartnerAssessmentView() {
         if (currentPage > 1) setCurrentPage((prev) => prev - 1);
     };
 
+    const handleEyeClick = (assessment) => {
+        setSelectedAssessment(assessment);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    // Set background color based on status
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'pending':
+                return 'bg-yellow-200';
+            case 'shared':
+                return 'bg-blue-200';
+            case 'eligible':
+                return 'bg-green-200';
+            case 'ineligible':
+                return 'bg-red-200';
+            default:
+                return '';
+        }
+    };
+
     return (
         <div className="container mx-auto p-6">
             <h2 className="text-2xl font-semibold mb-4">Assessment Information</h2>
 
-            {/* Loading State */}
             {isLoading && <p className="text-gray-600">Loading data...</p>}
             {error && <p className="text-red-600">Error fetching data: {error.message}</p>}
 
             {/* Filters */}
             <div className="flex justify-between items-center mb-4">
+                {/* Rows Per Page */}
                 <div>
                     <label htmlFor="rowsPerPage" className="mr-2">Rows per page:</label>
                     <select
@@ -84,7 +112,7 @@ export default function PartnerAssessmentView() {
                     </select>
                 </div>
 
-                {/* Name Search */}
+                {/* Search By Name */}
                 <div>
                     <label htmlFor="searchTerm" className="mr-2">Search by Name:</label>
                     <input
@@ -139,7 +167,7 @@ export default function PartnerAssessmentView() {
                     </thead>
                     <tbody>
                         {currentStudents.map((std, index) => (
-                            <tr key={index} className="hover:bg-gray-100 transition duration-200">
+                            <tr key={index} className={`hover:bg-gray-100 transition duration-200 ${getStatusColor(std.status)}`}>
                                 <td className="py-3 px-4 border-b">{std.createdAt.split("T")[0]}</td>
                                 <td className="py-3 px-4 border-b">{std.firstName} {std.lastName}</td>
                                 <td className="py-3 px-4 border-b">{std.emailID || "N/A"}</td>
@@ -148,7 +176,9 @@ export default function PartnerAssessmentView() {
                                 <td className="py-3 px-4 border-b">{std.Course}</td>
                                 <td className="py-3 px-4 border-b">{std.status}</td>
                                 <td className="py-3 px-4 border-b">
-                                    <EyeIcon />
+                                    <button onClick={() => handleEyeClick(std)}>
+                                        <EyeIcon />
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -176,6 +206,52 @@ export default function PartnerAssessmentView() {
                     Next
                 </button>
             </div>
+
+            {/* Custom Modal for Assessment Details */}
+            {selectedAssessment && isModalOpen && (
+            <div className="fixed inset-0 bg-gray-900 bg-opacity-70 flex justify-center items-center">
+            <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full transition-transform transform scale-105">
+                <h2 className="text-2xl font-semibold mb-6 text-center">Assessment Details</h2>
+        
+                {/* Displaying user details */}
+                <div className="mb-4">
+                    <p className="font-medium"><strong>Name:</strong> {selectedAssessment.firstName} {selectedAssessment.lastName}</p>
+                    <p className="font-medium"><strong>Email:</strong> {selectedAssessment.emailID}</p>
+                    <p className="font-medium"><strong>Phone:</strong> {selectedAssessment.mobileNumber}</p>
+                    <p className="font-medium"><strong>Country:</strong> {selectedAssessment.Country?.name}</p>
+                    <p className="font-medium"><strong>Course:</strong> {selectedAssessment.Course}</p>
+                    <p className="font-medium"><strong>Status:</strong> {selectedAssessment.status}</p>
+                </div>
+        
+                {/* Additional fields from the schema */}
+                <div className="mb-4">
+                    <p className="font-medium"><strong>Tracking ID:</strong> {selectedAssessment.trackingId}</p>
+                    <p className="font-medium"><strong>Passport Number:</strong> {selectedAssessment.passportNumber}</p>
+                    <p className="font-medium"><strong>Date of Birth:</strong> {selectedAssessment.dob}</p>
+                    <p className="font-medium"><strong>Last Education:</strong> {selectedAssessment.lastEdu}</p>
+                    <p className="font-medium"><strong>Year of Passing:</strong> {selectedAssessment.yearOfPassing}</p>
+                    <p className="font-medium"><strong>Work Experience:</strong> {selectedAssessment.workExperience ? 'Yes' : 'No'}</p>
+                    <p className="font-medium"><strong>Remarks:</strong> {selectedAssessment.remarks}</p>
+                </div>
+        
+                {/* Document links */}
+                <div className="mb-4">
+                    <p className="font-medium"><strong>Resume:</strong> <a href={selectedAssessment.resume} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View</a></p>
+                    <p className="font-medium"><strong>English Test Scorecard:</strong> <a href={selectedAssessment.englishTestScorecard} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View</a></p>
+                    <p className="font-medium"><strong>Academic Documents:</strong> <a href={selectedAssessment.acadmics} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View</a></p>
+                    <p className="font-medium"><strong>English Test Document:</strong> <a href={selectedAssessment.englishTestDoc} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View</a></p>
+                    <p className="font-medium"><strong>Work Experience Document:</strong> <a href={selectedAssessment.workExperienceDoc} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View</a></p>
+                </div>
+        
+                <button
+                    onClick={closeModal}
+                    className="mt-4 bg-blue-500 text-white p-3 rounded-lg w-full transition duration-300 hover:bg-blue-600"
+                >
+                    Close
+                </button>
+            </div>
+        </div>
+            )}
         </div>
     );
 }
