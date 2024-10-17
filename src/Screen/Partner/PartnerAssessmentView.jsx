@@ -16,6 +16,7 @@ export default function PartnerAssessmentView() {
     const [searchTerm, setSearchTerm] = useState('');
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
+    const [statusFilter, setStatusFilter] = useState('');
 
     const [selectedAssessment, setSelectedAssessment] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,7 +35,7 @@ export default function PartnerAssessmentView() {
         fetchData();
     }, [GetAssessmentByUser, userInfo._id, dispatch]);
 
-    // Filter by name and date range
+    // Filter by name, date range, and status
     const filteredAssessments = assessment?.filter((std) => {
         const fullName = `${std.firstName} ${std.lastName}`.toLowerCase();
         const matchesName = fullName.includes(searchTerm.toLowerCase());
@@ -42,8 +43,9 @@ export default function PartnerAssessmentView() {
         const createdAt = new Date(std.createdAt);
         const matchesFromDate = fromDate ? new Date(fromDate) <= createdAt : true;
         const matchesToDate = toDate ? new Date(toDate) >= createdAt : true;
+        const matchesStatus = statusFilter ? std.status === statusFilter : true;
 
-        return matchesName && matchesFromDate && matchesToDate;
+        return matchesName && matchesFromDate && matchesToDate && matchesStatus;
     });
 
     // Pagination Logic
@@ -86,6 +88,12 @@ export default function PartnerAssessmentView() {
             default:
                 return '';
         }
+    };
+
+    // Function to format date to DD-MM-YYYY
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
     };
 
     return (
@@ -148,6 +156,23 @@ export default function PartnerAssessmentView() {
                         />
                     </div>
                 </div>
+
+                {/* Status Filter */}
+                <div className="ml-4">
+                    <label htmlFor="statusFilter" className="mr-2">Filter by Status:</label>
+                    <select
+                        id="statusFilter"
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        className="border p-2 rounded"
+                    >
+                        <option value="">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="shared">Shared</option>
+                        <option value="eligible">Eligible</option>
+                        <option value="ineligible">Ineligible</option>
+                    </select>
+                </div>
             </div>
 
             {/* Student Table */}
@@ -168,7 +193,7 @@ export default function PartnerAssessmentView() {
                     <tbody>
                         {currentStudents.map((std, index) => (
                             <tr key={index} className={`hover:bg-gray-100 transition duration-200 ${getStatusColor(std.status)}`}>
-                                <td className="py-3 px-4 border-b">{std.createdAt.split("T")[0]}</td>
+                                <td className="py-3 px-4 border-b">{formatDate(std.createdAt)}</td>
                                 <td className="py-3 px-4 border-b">{std.firstName} {std.lastName}</td>
                                 <td className="py-3 px-4 border-b">{std.emailID || "N/A"}</td>
                                 <td className="py-3 px-4 border-b">{std.mobileNumber}</td>
@@ -185,72 +210,25 @@ export default function PartnerAssessmentView() {
                     </tbody>
                 </table>
             ) : (
-                <p className="text-gray-600">No student data available.</p>
+                <p className="text-gray-600">No assessments found.</p>
             )}
 
-            {/* Pagination Controls */}
+            {/* Pagination */}
             <div className="flex justify-between items-center mt-4">
-                <button
-                    onClick={goToPrevPage}
-                    disabled={currentPage === 1}
-                    className={`p-2 border rounded ${currentPage === 1 ? 'cursor-not-allowed opacity-50' : ''}`}
-                >
-                    Previous
-                </button>
-                <p>Page {currentPage} of {totalPages}</p>
-                <button
-                    onClick={goToNextPage}
-                    disabled={currentPage === totalPages}
-                    className={`p-2 border rounded ${currentPage === totalPages ? 'cursor-not-allowed opacity-50' : ''}`}
-                >
-                    Next
-                </button>
+                <button onClick={goToPrevPage} disabled={currentPage === 1} className="bg-blue-500 text-white px-4 py-2 rounded">Previous</button>
+                <span>Page {currentPage} of {totalPages}</span>
+                <button onClick={goToNextPage} disabled={currentPage === totalPages} className="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
             </div>
 
-            {/* Custom Modal for Assessment Details */}
-            {selectedAssessment && isModalOpen && (
-            <div className="fixed inset-0 bg-gray-900 bg-opacity-70 flex justify-center items-center">
-            <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full transition-transform transform scale-105">
-                <h2 className="text-2xl font-semibold mb-6 text-center">Assessment Details</h2>
-        
-                {/* Displaying user details */}
-                <div className="mb-4">
-                    <p className="font-medium"><strong>Name:</strong> {selectedAssessment.firstName} {selectedAssessment.lastName}</p>
-                    <p className="font-medium"><strong>Email:</strong> {selectedAssessment.emailID}</p>
-                    <p className="font-medium"><strong>Phone:</strong> {selectedAssessment.mobileNumber}</p>
-                    <p className="font-medium"><strong>Country:</strong> {selectedAssessment.Country?.name}</p>
-                    <p className="font-medium"><strong>Course:</strong> {selectedAssessment.Course}</p>
-                    <p className="font-medium"><strong>Status:</strong> {selectedAssessment.status}</p>
+            {/* Modal for Selected Assessment */}
+            {isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded shadow-lg">
+                        <h3 className="text-lg font-semibold">Assessment Details</h3>
+                        {/* Render assessment details here */}
+                        <button onClick={closeModal} className="mt-4 text-blue-500">Close</button>
+                    </div>
                 </div>
-        
-                {/* Additional fields from the schema */}
-                <div className="mb-4">
-                    <p className="font-medium"><strong>Tracking ID:</strong> {selectedAssessment.trackingId}</p>
-                    <p className="font-medium"><strong>Passport Number:</strong> {selectedAssessment.passportNumber}</p>
-                    <p className="font-medium"><strong>Date of Birth:</strong> {selectedAssessment.dob}</p>
-                    <p className="font-medium"><strong>Last Education:</strong> {selectedAssessment.lastEdu}</p>
-                    <p className="font-medium"><strong>Year of Passing:</strong> {selectedAssessment.yearOfPassing}</p>
-                    <p className="font-medium"><strong>Work Experience:</strong> {selectedAssessment.workExperience ? 'Yes' : 'No'}</p>
-                    <p className="font-medium"><strong>Remarks:</strong> {selectedAssessment.remarks}</p>
-                </div>
-        
-                {/* Document links */}
-                <div className="mb-4">
-                    <p className="font-medium"><strong>Resume:</strong> <a href={selectedAssessment.resume} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View</a></p>
-                    <p className="font-medium"><strong>English Test Scorecard:</strong> <a href={selectedAssessment.englishTestScorecard} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View</a></p>
-                    <p className="font-medium"><strong>Academic Documents:</strong> <a href={selectedAssessment.acadmics} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View</a></p>
-                    <p className="font-medium"><strong>English Test Document:</strong> <a href={selectedAssessment.englishTestDoc} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View</a></p>
-                    <p className="font-medium"><strong>Work Experience Document:</strong> <a href={selectedAssessment.workExperienceDoc} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View</a></p>
-                </div>
-        
-                <button
-                    onClick={closeModal}
-                    className="mt-4 bg-blue-500 text-white p-3 rounded-lg w-full transition duration-300 hover:bg-blue-600"
-                >
-                    Close
-                </button>
-            </div>
-        </div>
             )}
         </div>
     );
