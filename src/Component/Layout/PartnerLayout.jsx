@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLogoutMutation } from '../../slices/userApiSlice';
 import { logout } from '../../slices/authSlice';
 import { toast } from 'react-toastify';
-import { useFetchNotifcationMutation } from '../../slices/adminApiSlice';
+import { useFetchNotifcationMutation, useGetMyPopupMutation } from '../../slices/adminApiSlice';
 import { FaTicket } from 'react-icons/fa6';
 
 const menuItems = [
@@ -84,6 +84,35 @@ export default function PartnerLayout() {
   const location = useLocation();
   const [logoutApiCall, { isSuccess }] = useLogoutMutation();
   const [FetchNotifcation] = useFetchNotifcationMutation();
+  const [GetMyPopup] = useGetMyPopupMutation()
+  const [popups, setPopups] = useState([]);
+  const [currentPopupIndex, setCurrentPopupIndex] = useState(0);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchPopups = async () => {
+      try {
+        const result = await GetMyPopup().unwrap();
+        setPopups(result);
+        if (result.length > 0) {
+          setIsPopupOpen(true);
+        }
+      } catch (err) {
+        console.error('Failed to fetch popups:', err);
+      }
+    };
+
+    fetchPopups();
+  }, [GetMyPopup]);
+
+  const handleClosePopup = () => {
+    if (currentPopupIndex < popups.length - 1) {
+      setCurrentPopupIndex(currentPopupIndex + 1);
+    } else {
+      setIsPopupOpen(false);
+      setCurrentPopupIndex(0);
+    }
+  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -148,9 +177,28 @@ export default function PartnerLayout() {
   const handleViewAllNotifications = () => {
     setVisibleNotifications(notifications.length); // Show all notifications
   };
-
+  console.log("My popup",popups)
   return (
     <div className="flex h-screen bg-gray-50">
+       {/* Tailwind CSS Popup Dialog */}
+       {isPopupOpen && popups.length > 0 && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div className="p-6">
+              <h2 className="text-xl font-semibold mb-2">{popups[currentPopupIndex]?.title}</h2>
+              <p className="text-gray-600 mb-6">{popups[currentPopupIndex]?.details}</p>
+              <div className="flex justify-end">
+                <button
+                  onClick={handleClosePopup}
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                >
+                  {currentPopupIndex < popups.length - 1 ? 'Next' : 'Close'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Sidebar */}
       <div
         className={`bg-white shadow-lg text-gray-700 transition-all duration-300 ease-in-out ${

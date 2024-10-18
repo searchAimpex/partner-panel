@@ -84,6 +84,8 @@ const router = createBrowserRouter(
         <Route path= '/frenchise/ticket/add' element= {<PartnerTicketAddScreen />} />
         <Route path= '/frenchise/ticket/view' element= {<PartnerTicketScreen />} />
         <Route path= '/frenchise/key' element = {<PartnerKey />} />
+        <Route path = '/frenchise/profile/create' element = {<PartnerCreateProfile />} />
+        <Route path = '/frenchise/assessment/view' element = {< PartnerAssessmentView/>} />
       </Route>
       <Route element={<CounsellerRoutes />}>
         <Route path=  '/counsellor/dashboard' element={<DashboardScreen/>} />
@@ -100,7 +102,8 @@ const router = createBrowserRouter(
         <Route path= '/counsellor/ticket/add' element= {<PartnerTicketAddScreen />} />
         <Route path= '/counsellor/ticket/view' element= {<PartnerTicketScreen />} />
         <Route path= '/counsellor/key' element = {<PartnerKey />} />
-       
+        <Route path = '/counsellor/profile/create' element = {<PartnerCreateProfile />} />
+        <Route path = '/counsellor/assessment/view' element = {< PartnerAssessmentView/>} />
       </Route>
     </Route>
   )

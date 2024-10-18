@@ -127,6 +127,12 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 method: 'GET',
             }),
         }),
+        GetMyPopup: builder.mutation({
+            query:(id)=>({
+                url: `${USERS_URL}/popup`,
+                method: 'GET',
+            }),
+        }),
     })
 
 });
@@ -135,5 +141,6 @@ export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMut
     useAddUserMutation,useFetchUserMutation,useFetchNotifcationMutation,useFetchOneUniversityMutation,
     useCreateStudentMutation,useGetStudentByUserMutation,useFetchOneStudentMutation,
     useFetchOneStudentByTrackingIDMutation,useCreateTicketMutation,useGetOneTicketMutation ,useCreateResponseTicketMutation,
-    useStudentMatrixMutation,useGetAllPromotionalMutation,useCreateAssessmentMutation,useGetAssessmentByUserMutation
+    useStudentMatrixMutation,useGetAllPromotionalMutation,useCreateAssessmentMutation,useGetAssessmentByUserMutation,
+    useGetMyPopupMutation
 } = userApiSlice

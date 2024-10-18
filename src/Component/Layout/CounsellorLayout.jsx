@@ -22,6 +22,7 @@ import { useLogoutMutation } from '../../slices/userApiSlice';
 import { logout } from '../../slices/authSlice';
 import { toast } from 'react-toastify';
 import { useFetchNotifcationMutation } from '../../slices/adminApiSlice';
+import { FaTicket } from 'react-icons/fa6';
 
 const menuItems = [
   { icon: FaCube, label: 'Dashboard', link: '/counsellor/dashboard' },
@@ -36,6 +37,16 @@ const menuItems = [
       { label: 'Add Student', link: '/counsellor/student/add' },
       { label: 'View Student', link: '/counsellor/student/view' },
       {label:'Track Student' ,link: '/counsellor/student/track'},
+    ],
+  },
+  {
+    icon: FaTicket,
+    label: 'Profile Assessment',
+    hasSubmenu: true,
+    submenu: [
+      { label: 'Add  Assessment',  link: '/counsellor/profile/create' },
+      { label: 'View Assessment', link: '/counsellor/assessment/view'}
+   
     ],
   },
 ];
