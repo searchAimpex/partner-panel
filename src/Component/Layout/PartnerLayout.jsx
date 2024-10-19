@@ -183,13 +183,13 @@ export default function PartnerLayout() {
        {/* Tailwind CSS Popup Dialog */}
        {isPopupOpen && popups.length > 0 && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
-            <div className="p-6">
-              <img className="text-gray-600 h-[400px] w-[600px] object-contained mb-6" src={popups[currentPopupIndex]?.imageURL}></img>
+          <div className="bg-white rounded-lg shadow-xl w-[600px] mx-4">
+            <div className="p-4">
+              <img className="text-gray-600 h-[500px] w-[600px] object-contained mb-6" src={popups[currentPopupIndex]?.imageURL}></img>
               <div className="flex justify-end">
                 <button
                   onClick={handleClosePopup}
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                  className="p-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                 >
                   {currentPopupIndex < popups.length - 1 ? 'Next' : 'Close'}
                 </button>
