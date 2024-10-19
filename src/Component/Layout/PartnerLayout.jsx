@@ -185,8 +185,7 @@ export default function PartnerLayout() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
             <div className="p-6">
-              <h2 className="text-xl font-semibold mb-2">{popups[currentPopupIndex]?.title}</h2>
-              <p className="text-gray-600 mb-6">{popups[currentPopupIndex]?.details}</p>
+              <img className="text-gray-600 h-[400px] w-[600px] object-contained mb-6" src={popups[currentPopupIndex]?.imageURL}></img>
               <div className="flex justify-end">
                 <button
                   onClick={handleClosePopup}
