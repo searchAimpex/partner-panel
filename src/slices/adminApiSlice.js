@@ -129,7 +129,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         }),
         GetMyPopup: builder.mutation({
             query:(id)=>({
-                url: `${USERS_URL}/popup`,
+                url: `${USERS_URL}/popup/partner`,
                 method: 'GET',
             }),
         }),
