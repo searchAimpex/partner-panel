@@ -12,6 +12,8 @@ import {
   FaBell,
   FaCog,
   FaUserCircle,
+  FaList,
+  FaMoneyBill,
 } from 'react-icons/fa';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -67,6 +69,8 @@ const menuItems = [
    
     ],
   },
+  { icon: FaList, label: 'USEFUL INFORMATION', link: '/partner/usefullinformation' },
+  { icon: FaMoneyBill, label: 'Commission', link: '/partner/commission' },
 ];
 
 export default function PartnerLayout() {

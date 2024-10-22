@@ -133,6 +133,18 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 method: 'GET',
             }),
         }),
+        GetPartnerUpload : builder.mutation({
+            query: ()=> ({
+                url: `${USERS_URL}/upload/partner`,
+                method: 'GET',
+            })
+        }),
+        GetCommissionUpload : builder.mutation({
+            query: ()=> ({
+                url: `${USERS_URL}/commission/partner`,
+                method: 'GET',
+            })
+        }),
     })
 
 });
@@ -142,5 +154,5 @@ export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMut
     useCreateStudentMutation,useGetStudentByUserMutation,useFetchOneStudentMutation,
     useFetchOneStudentByTrackingIDMutation,useCreateTicketMutation,useGetOneTicketMutation ,useCreateResponseTicketMutation,
     useStudentMatrixMutation,useGetAllPromotionalMutation,useCreateAssessmentMutation,useGetAssessmentByUserMutation,
-    useGetMyPopupMutation
+    useGetMyPopupMutation,useGetPartnerUploadMutation,useGetCommissionUploadMutation
 } = userApiSlice

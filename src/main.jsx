@@ -36,6 +36,8 @@ import PartnerTicketAddScreen from './Screen/Partner/PartnerTicketAddScreen.jsx'
 import PartnerKey from './Screen/Partner/PartnerKey.jsx';
 import PartnerCreateProfile from './Screen/Partner/PartnerCreateProfile.jsx';
 import PartnerAssessmentView from './Screen/Partner/PartnerAssessmentView.jsx';
+import PartnerUsefulInformationScreen from './Screen/Partner/PartnerUsefulInformationScreen.jsx';
+import PartnerCommissionScreen from './Screen/Partner/PartnerCommissionScreen.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -63,6 +65,8 @@ const router = createBrowserRouter(
         <Route path = '/partner/key' element = {<PartnerKey />} />
         <Route path = '/partner/profile/create' element = {<PartnerCreateProfile />} />
         <Route path = '/partner/assessment/view' element = {< PartnerAssessmentView/>} />
+        <Route path =  '/partner/usefullinformation'  element = {<PartnerUsefulInformationScreen />} />      
+        <Route path = '/partner/commission' element = {< PartnerCommissionScreen />} />
       </Route>
       <Route element={<FrenchiseRoutes />}>
         <Route path=  '/frenchise/dashboard' element={<DashboardScreen/>} />
