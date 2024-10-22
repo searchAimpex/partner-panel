@@ -69,7 +69,7 @@ const menuItems = [
    
     ],
   },
-  { icon: FaList, label: 'USEFUL INFORMATION', link: '/partner/usefullinformation' },
+  { icon: FaList, label: 'Information', link: '/partner/usefullinformation' },
   { icon: FaMoneyBill, label: 'Commission', link: '/partner/commission' },
 ];
 
