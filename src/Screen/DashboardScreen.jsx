@@ -168,10 +168,10 @@ const DashboardScreen = () => {
 
     // Assessment metrics
     const assessmentMetrics = [
-        { title: 'Total Assessments', value: '0', icon: FileText },
-        { title: 'Assessments Shared', value: '0', icon: Users },
-        { title: 'Assessments Pending', value: '0', icon: Clock },
-        { title: 'Application Submitted', value: '0', icon: Check }
+        { title: 'Total Assessments', value: rawData?.totalAssessmentsProfile, icon: FileText , color: 'bg-blue-100'  },
+        { title: 'Assessments Shared', value: rawData?.totalOffersProfile, icon: Users ,color: 'bg-cyan-100' },
+        { title: 'Assessments Pending', value:  rawData?.totalFeesPaidProfile, icon: Clock ,color: 'bg-orange-100'},
+        { title: 'Application Submitted', value: rawData?.totalAcceptanceLettersProfile, icon: Check ,color: 'bg-green-100'}
     ];
 
     // Handle modal open/close
@@ -218,7 +218,7 @@ const DashboardScreen = () => {
         <div className="p-8 bg-gray-50 min-h-screen">
             {/* Top Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                {topMetrics.map((metric, index) => (
+                {topMetrics?.map((metric, index) => (
                     <div key={index} className="p-6 bg-white shadow-sm">
                         <div className="flex items-start justify-between">
                             <div>
@@ -232,6 +232,22 @@ const DashboardScreen = () => {
                     </div>
                 ))}
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                {assessmentMetrics?.map((metric, index) => (
+                    <div key={index} className="p-6 bg-white shadow-sm">
+                        <div className="flex items-start justify-between">
+                            <div>
+                                <h3 className="text-gray-600 font-medium mb-2">{metric.title}</h3>
+                                <p className="text-2xl font-semibold">{metric.value}</p>
+                            </div>
+                            <div className={`${metric.color} p-3 rounded-lg`}>
+                                <metric.icon className="w-5 h-5" />
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
 
             {/* Book Training Section */}
             <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
