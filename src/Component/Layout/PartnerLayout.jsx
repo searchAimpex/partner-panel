@@ -72,6 +72,8 @@ const menuItems = [
   { icon: FaList, label: 'Information', link: '/partner/usefullinformation' },
   { icon: FaMoneyBill, label: 'Commission', link: '/partner/commission' },
   { icon: FaMoneyBill1Wave, label: 'Loan', link: '/partner/loan' },
+  { icon: FaMoneyBill1Wave, label: 'Payment', link: '/partner/transaction' },
+
 
 
 ];

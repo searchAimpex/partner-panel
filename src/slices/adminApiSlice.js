@@ -158,6 +158,12 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 url: `${USERS_URL}/loan/${data}`,
                 method: 'GET',
             }),
+        }),
+        GetLedgerByCenterCode:builder.mutation({
+            query:(data)=>({
+                url: `${USERS_URL}/transaction/${data}`,
+                method: 'GET',
+            }),
         })
     })
 
@@ -169,5 +175,5 @@ export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMut
     useFetchOneStudentByTrackingIDMutation,useCreateTicketMutation,useGetOneTicketMutation ,useCreateResponseTicketMutation,
     useStudentMatrixMutation,useGetAllPromotionalMutation,useCreateAssessmentMutation,useGetAssessmentByUserMutation,
     useGetMyPopupMutation,useGetPartnerUploadMutation,useGetCommissionUploadMutation,
-    useCreateLoanMutation,useGetLoadByUserMutation
+    useCreateLoanMutation,useGetLoadByUserMutation,useGetLedgerByCenterCodeMutation
 } = userApiSlice
