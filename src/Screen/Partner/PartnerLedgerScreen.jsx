@@ -11,7 +11,7 @@ export default function PartnerLedgerScreen() {
   useEffect(() => {
     const fetchLedger = async () => {
       try {
-        const ledger = await getLedgerByCenterCode(userInfo.centerCode).unwrap();
+        const ledger = await getLedgerByCenterCode(userInfo.CenterCode).unwrap();
         setTransactions(ledger);
       } catch (error) {
         console.error("Failed to fetch ledger:", error);
