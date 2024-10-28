@@ -1,3 +1,4 @@
+import { datalist } from 'framer-motion/m';
 import { apiSlice } from './apiSlice';
 const USERS_URL = '/api/admin';
 
@@ -145,6 +146,19 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 method: 'GET',
             })
         }),
+        CreateLoan: builder.mutation({
+            query:(data)=>({
+                url: `${USERS_URL}/loan`,
+                method: 'POST',
+                body: data
+            }),
+        }),
+        GetLoadByUser: builder.mutation({
+            query:(data)=>({
+                url: `${USERS_URL}/loan/${data}`,
+                method: 'GET',
+            }),
+        })
     })
 
 });
@@ -154,5 +168,6 @@ export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMut
     useCreateStudentMutation,useGetStudentByUserMutation,useFetchOneStudentMutation,
     useFetchOneStudentByTrackingIDMutation,useCreateTicketMutation,useGetOneTicketMutation ,useCreateResponseTicketMutation,
     useStudentMatrixMutation,useGetAllPromotionalMutation,useCreateAssessmentMutation,useGetAssessmentByUserMutation,
-    useGetMyPopupMutation,useGetPartnerUploadMutation,useGetCommissionUploadMutation
+    useGetMyPopupMutation,useGetPartnerUploadMutation,useGetCommissionUploadMutation,
+    useCreateLoanMutation,useGetLoadByUserMutation
 } = userApiSlice

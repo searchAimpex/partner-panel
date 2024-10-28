@@ -24,7 +24,7 @@ import { useLogoutMutation } from '../../slices/userApiSlice';
 import { logout } from '../../slices/authSlice';
 import { toast } from 'react-toastify';
 import { useFetchNotifcationMutation, useGetMyPopupMutation } from '../../slices/adminApiSlice';
-import { FaTicket } from 'react-icons/fa6';
+import { FaMoneyBill1Wave, FaTicket } from 'react-icons/fa6';
 
 const menuItems = [
   { icon: FaCube, label: 'Dashboard', link: '/partner/dashboard' },
@@ -71,6 +71,9 @@ const menuItems = [
   },
   { icon: FaList, label: 'Information', link: '/partner/usefullinformation' },
   { icon: FaMoneyBill, label: 'Commission', link: '/partner/commission' },
+  { icon: FaMoneyBill1Wave, label: 'Loan', link: '/partner/loan' },
+
+
 ];
 
 export default function PartnerLayout() {
@@ -315,7 +318,8 @@ export default function PartnerLayout() {
         {/* Navbar */}
         <header className="bg-white shadow-sm">
           <div className="flex items-center justify-between p-4">
-          <div>
+
+              <div>
                 <button
                   onClick={() => setIsCollapsed(!isCollapsed)}
                   className="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
@@ -368,12 +372,13 @@ export default function PartnerLayout() {
             </div>
 
             <div className="flex items-center mr-[50px] space-x-6">
+             
               <div className="relative">
                 <button
                   onClick={toggleNotifications}
-                  className="relative text-gray-600 focus:outline-none"
+                  className="relative text-white focus:outline-none"
                 >
-                  <FaBell size={30} />
+                  <FaBell size={20} />
                   <span className="absolute top-0 right-0 bg-red-600 text-white text-sm rounded-full px-1">
                     {notifications.length}
                   </span>
@@ -415,9 +420,9 @@ export default function PartnerLayout() {
               <div className="relative">
                 <button
                   onClick={toggleDropdown}
-                  className="relative text-gray-600 focus:outline-none"
+                  className="relative text-white focus:outline-none"
                 >
-                  <FaUserCircle size={30} />
+                  <FaUserCircle size={20} />
                 </button>
 
                 {/* Dropdown */}
