@@ -7,7 +7,6 @@ export default function PartnerLedgerScreen() {
   const { userInfo } = useSelector(state => state.auth);
   const [getLedgerByCenterCode] = useGetLedgerByCenterCodeMutation();
   const [transactions, setTransactions] = useState([]);
-    console.log("my tansaction",transactions)
   useEffect(() => {
     const fetchLedger = async () => {
       try {
@@ -31,6 +30,9 @@ export default function PartnerLedgerScreen() {
                 <h3 className="text-xl font-semibold text-gray-800">Amount: ${transaction.amount}</h3>
                 <span className="text-sm text-gray-500">{transaction.transactionDate}</span>
               </div>
+              <p className="text-sm text-gray-600 mb-2">
+                <strong>Transaction ID:</strong> {transaction.transactionID}
+              </p>
               <p className="text-sm text-gray-600 mb-2">
                 <strong>Mode:</strong> {transaction.transactionMode}
               </p>
