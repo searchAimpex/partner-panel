@@ -164,7 +164,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 url: `${USERS_URL}/transaction/${data}`,
                 method: 'GET',
             }),
-        })
+        }),
+        FetchNav:builder.mutation({
+            query: ()=> ({
+                url:`${USERS_URL}/nav`,
+                method: 'GET',
+            }),
+        }),
     })
 
 });
@@ -175,5 +181,6 @@ export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMut
     useFetchOneStudentByTrackingIDMutation,useCreateTicketMutation,useGetOneTicketMutation ,useCreateResponseTicketMutation,
     useStudentMatrixMutation,useGetAllPromotionalMutation,useCreateAssessmentMutation,useGetAssessmentByUserMutation,
     useGetMyPopupMutation,useGetPartnerUploadMutation,useGetCommissionUploadMutation,
-    useCreateLoanMutation,useGetLoadByUserMutation,useGetLedgerByCenterCodeMutation
+    useCreateLoanMutation,useGetLoadByUserMutation,useGetLedgerByCenterCodeMutation,
+    useFetchNavMutation
 } = userApiSlice

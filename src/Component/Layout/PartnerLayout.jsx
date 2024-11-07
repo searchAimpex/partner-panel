@@ -23,8 +23,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLogoutMutation } from '../../slices/userApiSlice';
 import { logout } from '../../slices/authSlice';
 import { toast } from 'react-toastify';
-import { useFetchNotifcationMutation, useGetMyPopupMutation } from '../../slices/adminApiSlice';
+import { useFetchNavMutation, useFetchNotifcationMutation, useGetMyPopupMutation } from '../../slices/adminApiSlice';
 import { FaMoneyBill1Wave, FaTicket } from 'react-icons/fa6';
+import { RiInformationLine, RiInformationOffFill } from 'react-icons/ri';
 
 const menuItems = [
   { icon: FaCube, label: 'Dashboard', link: '/partner/dashboard' },
@@ -97,11 +98,16 @@ export default function PartnerLayout() {
   const [popups, setPopups] = useState([]);
   const [currentPopupIndex, setCurrentPopupIndex] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [extraLink,setExtraLink] = useState(false);
+  const [FetchNav] = useFetchNavMutation()
 
   useEffect(() => {
     const fetchPopups = async () => {
       try {
         const result = await GetMyPopup().unwrap();
+        const second = await FetchNav().unwrap()
+        setExtraLink(second)
+
         setPopups(result);
         if (result.length > 0) {
           setIsPopupOpen(true);
@@ -112,7 +118,7 @@ export default function PartnerLayout() {
     };
 
     fetchPopups();
-  }, [GetMyPopup]);
+  }, [GetMyPopup,FetchNav]);
 
   const handleClosePopup = () => {
     if (currentPopupIndex < popups.length - 1) {
@@ -126,7 +132,7 @@ export default function PartnerLayout() {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-
+  console.log("fix======>",extraLink)
   const toggleNotifications = async () => {
     setIsNotificationsOpen(!isNotificationsOpen);
 
@@ -209,7 +215,7 @@ export default function PartnerLayout() {
       )}
       {/* Sidebar */}
       <div
-        className={`bg-white shadow-lg text-gray-700 transition-all duration-300 ease-in-out ${
+        className={`bg-white shadow-lg text-gray-700 transition-all overflow-auto duration-300 ease-in-out ${
           isCollapsed ? 'w-20' : 'w-64'
         }`}
       >
@@ -312,6 +318,26 @@ export default function PartnerLayout() {
               </div>
             );
           })}
+          <div className='mt-2'>
+            {extraLink?.navItems?.map((link)=>{
+              return( 
+                <div className='flex flex-row  space-between items-center py-3 px-4'>
+                   <RiInformationLine
+                    size={20}
+                  
+                  />
+                <Link
+                  to={link.url}
+                  className="block text-sm ml-2 font-bold text-gray-700 hover:bg-gray-100"
+                >
+                  {link.name}
+                </Link>
+                </div>
+              )
+
+            })}
+
+          </div>
         </nav>
       </div>
 

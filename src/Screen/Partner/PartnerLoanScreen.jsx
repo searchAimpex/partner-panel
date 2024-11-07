@@ -5,6 +5,7 @@ import { app } from '../../firebase';
 import { useCreateLoanMutation, useGetLoadByUserMutation } from '../../slices/adminApiSlice';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { Input } from 'postcss';
 const storage = getStorage(app);
 
 const PartnerLoanScreen = () => {
@@ -209,12 +210,30 @@ const PartnerLoanScreen = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
 
-                <input
-                  name="offerLetter"
-                  type="file"
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-                />
+                <div className="w-full">
+                  <label htmlFor="offerLetter" className="block text-sm font-medium text-gray-700 mb-1">
+                    Offer Letter
+                  </label>
+                  <input
+                    id="offerLetter"
+                    name="offerLetter"
+                    type="file"
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  />
+                </div>
+                <div className="w-full">
+                  <label htmlFor="passportDoc" className="block text-sm font-medium text-gray-700 mb-1">
+                    Passport
+                  </label>
+                  <input
+                    id="passportDoc"
+                    name="passportDoc"
+                    type="file"
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  />
+                </div>
               </div>
 
               <div className="flex gap-4 mt-8">
