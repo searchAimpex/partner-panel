@@ -171,6 +171,12 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 method: 'GET',
             }),
         }),
+        GetMyItems:builder.mutation({
+            query: (data)=> ({
+                url: `${USERS_URL}/file/${data}`,
+                method: 'GET',
+            }),
+        })
     })
 
 });
@@ -182,5 +188,5 @@ export const {useCountryFetchMutation,useFetchUniversityMutation,useAllCourseMut
     useStudentMatrixMutation,useGetAllPromotionalMutation,useCreateAssessmentMutation,useGetAssessmentByUserMutation,
     useGetMyPopupMutation,useGetPartnerUploadMutation,useGetCommissionUploadMutation,
     useCreateLoanMutation,useGetLoadByUserMutation,useGetLedgerByCenterCodeMutation,
-    useFetchNavMutation
+    useFetchNavMutation,useGetMyItemsMutation
 } = userApiSlice

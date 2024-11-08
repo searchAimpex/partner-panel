@@ -14,6 +14,7 @@ import {
   FaUserCircle,
   FaList,
   FaMoneyBill,
+  FaDownload,
 } from 'react-icons/fa';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -32,6 +33,8 @@ const menuItems = [
   { icon: FaIcons, label: 'University', link: '/partner/university' },
   { icon: FaChartBar, label: 'Country', link: '/partner/country' },
   { icon: FaTable, label: 'Course', link: '/partner/course' },
+  { icon: FaDownload, label: 'Protional Items', link: '/partner/promotional' },
+
   {
     icon: FaUser,
     label: 'User Pages',

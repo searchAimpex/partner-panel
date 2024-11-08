@@ -40,6 +40,8 @@ import PartnerUsefulInformationScreen from './Screen/Partner/PartnerUsefulInform
 import PartnerCommissionScreen from './Screen/Partner/PartnerCommissionScreen.jsx';
 import PartnerLoanScreen from './Screen/Partner/PartnerLoanScreen.jsx';
 import PartnerLedgerScreen from './Screen/Partner/PartnerLedgerScreen.jsx';
+import PartnerPromotionalScreen from './Screen/Partner/PartnerPromotionalScreen.jsx';
+import PartnerPromotionalDetailedScreen from './Screen/Partner/PartnerPromotionalDetailedScreen.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -71,6 +73,9 @@ const router = createBrowserRouter(
         <Route path = '/partner/commission' element = {< PartnerCommissionScreen />} />
         <Route path = '/partner/loan' element = {<PartnerLoanScreen />} />
         <Route path = '/partner/transaction' element = {<PartnerLedgerScreen />} />
+        <Route path= '/partner/promotional' element= {<PartnerPromotionalScreen />} />
+        <Route path= '/partner/promotional/:id' element= {<PartnerPromotionalDetailedScreen />} />
+
 
 
       </Route>
