@@ -33,7 +33,7 @@ const menuItems = [
   { icon: FaIcons, label: 'University', link: '/partner/university' },
   { icon: FaChartBar, label: 'Country', link: '/partner/country' },
   { icon: FaTable, label: 'Course', link: '/partner/course' },
-  { icon: FaDownload, label: 'Protional Items', link: '/partner/promotional' },
+  { icon: FaDownload, label: 'Marketing Items', link: '/partner/promotional' },
 
   {
     icon: FaUser,
