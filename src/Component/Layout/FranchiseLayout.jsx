@@ -58,10 +58,10 @@ const menuItems = [
    
     ],
   },
-    { icon: FaList, label: 'Information', link: '/frenchise/usefullinformation' },
-    { icon: FaMoneyBill, label: 'Commission', link: '/frenchise/commission' },
-    { icon: FaMoneyBill1Wave, label: 'Loan', link: '/frenchise/loan' },
-    { icon: FaMoneyBill1Wave, label: 'Payment', link: '/frenchise/transaction' },
+    // { icon: FaList, label: 'Information', link: '/frenchise/usefullinformation' },
+    // { icon: FaMoneyBill, label: 'Commission', link: '/frenchise/commission' },
+    // { icon: FaMoneyBill1Wave, label: 'Loan', link: '/frenchise/loan' },
+    // { icon: FaMoneyBill1Wave, label: 'Payment', link: '/frenchise/transaction' },
 ];
 
 export default function PartnerLayout() {
