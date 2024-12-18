@@ -16,11 +16,11 @@ export default function LoginScreen() {
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (userInfo) {
-      navigate('/redirect');
-    }
+    
     if(isSuccess){
       toast.success("Login success!")
+      navigate('/redirect');
+
     }
   }, [navigate, userInfo]);
 

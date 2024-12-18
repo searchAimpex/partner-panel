@@ -5,12 +5,14 @@ import { Navigate } from 'react-router-dom';
 
 const RedirectAfterLogin = () => {
   const { userInfo } = useSelector((state) => state.auth);
+  console.log("I was hit but ",userInfo)
 
   if (userInfo?.role === 'partner') {
     return <Navigate to="/partner/dashboard" replace />;
   }
 
-  if (userInfo?.role === 'frenchise') {
+  if (userInfo?.role === 'franchise') {
+    console.log("it should trigger here ")
     return <Navigate to="/frenchise/dashboard" replace />;
   }
   if (userInfo?.role === 'counsellor') {

@@ -7,7 +7,7 @@ import FranchiseLayout from '../Layout/FranchiseLayout';
 export default function FrenchiseRoutes() {
   const { userInfo } = useSelector((state) => state.auth);
 
-   return userInfo?.role === "frenchise" ? <FranchiseLayout /> : <Navigate to='/' replace />
+   return userInfo?.role === "franchise" ? <FranchiseLayout /> : <Navigate to='/' replace />
 
 }
 
