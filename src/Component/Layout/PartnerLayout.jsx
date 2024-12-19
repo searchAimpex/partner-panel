@@ -30,42 +30,13 @@ import { RiInformationLine, RiInformationOffFill } from 'react-icons/ri';
 
 const menuItems = [
   { icon: FaCube, label: 'Dashboard', link: '/partner/dashboard' },
-  { icon: FaIcons, label: 'University', link: '/partner/university' },
-  { icon: FaChartBar, label: 'Country', link: '/partner/country' },
-  { icon: FaTable, label: 'Course', link: '/partner/course' },
-  { icon: FaDownload, label: 'Marketing Items', link: '/partner/promotional' },
+  { icon: FaIcons, label: 'Universities', link: '/partner/university' },
+  { icon: FaTable, label: 'Course Finder', link: '/partner/course' },
 
-  {
-    icon: FaUser,
-    label: 'User Pages',
-    hasSubmenu: true,
-    submenu: [
-      { label: 'Add User', link: '/partner/addUser' },
-      { label: 'View User', link: '/partner/viewUser' },
-    ],
-  },
-  {
-    icon: FaUser,
-    label: 'Student Pages',
-    hasSubmenu: true,
-    submenu: [
-      { label: 'Add Student', link: '/partner/student/add' },
-      { label: 'View Student', link: '/partner/student/view' },
-      {label:'Track Student' ,link: '/partner/student/track'},
-    ],
-  },
+  { icon: FaChartBar, label: 'Countries', link: '/partner/country' },
   {
     icon: FaTicket,
-    label: 'Ticket Pages',
-    hasSubmenu: true,
-    submenu: [
-      { label: 'Add Ticket', link: '/partner/ticket/add' },
-      { label: 'View Ticket', link: '/partner/ticket/view' },
-    ],
-  },
-  {
-    icon: FaTicket,
-    label: 'Profile Assessment',
+    label: 'Create Assessment',
     hasSubmenu: true,
     submenu: [
       { label: 'Add  Assessment',  link: '/partner/profile/create' },
@@ -73,10 +44,44 @@ const menuItems = [
    
     ],
   },
-  { icon: FaList, label: 'Information', link: '/partner/usefullinformation' },
-  { icon: FaMoneyBill, label: 'Commission', link: '/partner/commission' },
-  { icon: FaMoneyBill1Wave, label: 'Loan', link: '/partner/loan' },
-  { icon: FaMoneyBill1Wave, label: 'Payment', link: '/partner/transaction' },
+  {
+    icon: FaUser,
+    label: 'Apply Student',
+    hasSubmenu: true,
+    submenu: [
+      { label: 'Add Student', link: '/partner/student/add' },
+      { label: 'View Student', link: '/partner/student/view' },
+      {label:'Track Student' ,link: '/partner/student/track'},
+    ],
+  },
+  { icon: FaList, label: 'Useful Information', link: '/partner/usefullinformation' },
+  { icon: FaDownload, label: 'Marketing Items', link: '/partner/promotional' },
+  { icon: FaMoneyBill, label: 'Commission List', link: '/partner/commission' },
+
+  {
+    icon: FaUser,
+    label: 'Add Counsellor',
+    hasSubmenu: true,
+    submenu: [
+      { label: 'Add Counsellor', link: '/partner/addUser' },
+      { label: 'View Counsellor', link: '/partner/viewUser' },
+    ],
+  },
+  { icon: FaMoneyBill1Wave, label: 'Loan Lead', link: '/partner/loan' },
+  { icon: FaMoneyBill1Wave, label: 'Recived Payment', link: '/partner/transaction' },
+
+
+
+  {
+    icon: FaTicket,
+    label: 'Genrate Ticket',
+    hasSubmenu: true,
+    submenu: [
+      { label: 'Add Ticket', link: '/partner/ticket/add' },
+      { label: 'View Ticket', link: '/partner/ticket/view' },
+    ],
+  },
+ 
 
 
 
@@ -246,9 +251,9 @@ export default function PartnerLayout() {
 
         {/* User Profile */}
         <div className="flex flex-col items-center mt-4 mb-4">
-          { userInfo.Logo ? 
+          { userInfo.ProfilePhoto ? 
            <img
-            src={userInfo.Logo}
+            src={userInfo?.ProfilePhoto}
             alt="User"
             className="w-12 h-12 rounded-full mb-2"
           />   :
@@ -406,13 +411,11 @@ export default function PartnerLayout() {
              
               <div className="relative">
                 <button
-                  onClick={toggleNotifications}
-                  className="relative text-white focus:outline-none"
+                        onClick={()=>navigate('/frenchise/notification')}
+                        className="relative text-white focus:outline-none"
                 >
                   <FaBell size={20} />
-                  <span className="absolute top-0 right-0 bg-red-600 text-white text-sm rounded-full px-1">
-                    {notifications.length}
-                  </span>
+                  
                 </button>
 
                 {/* Notifications Dropdown */}

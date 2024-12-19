@@ -12,6 +12,8 @@ import {
   FaBell,
   FaCog,
   FaUserCircle,
+  FaList,
+  FaMoneyBill,
 } from 'react-icons/fa';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -22,35 +24,16 @@ import { useLogoutMutation } from '../../slices/userApiSlice';
 import { logout } from '../../slices/authSlice';
 import { toast } from 'react-toastify';
 import { useFetchNotifcationMutation } from '../../slices/adminApiSlice';
-import { FaTicket } from 'react-icons/fa6';
+import { FaMoneyBill1Wave, FaTicket } from 'react-icons/fa6';
 
 const menuItems = [
   { icon: FaCube, label: 'Dashboard', link: '/frenchise/dashboard' },
-  { icon: FaIcons, label: 'University', link: '/frenchise/university' },
-  { icon: FaChartBar, label: 'Country', link: '/frenchise/country' },
-  { icon: FaTable, label: 'Course', link: '/frenchise/course' },
-  {
-    icon: FaUser,
-    label: 'User Pages',
-    hasSubmenu: true,
-    submenu: [
-      { label: 'Add User', link: '/frenchise/addUser' },
-      { label: 'View User', link: '/frenchise/viewUser' },
-    ],
-  },
-  {
-    icon: FaUser,
-    label: 'Student Pages',
-    hasSubmenu: true,
-    submenu: [
-      { label: 'Add Student', link: '/frenchise/student/add' },
-      { label: 'View Student', link: '/frenchise/student/view' },
-      {label:'Track Student' ,link: '/frenchise/student/track'},
-    ],
-  },
+  { icon: FaIcons, label: 'Universities', link: '/frenchise/university' },
+  { icon: FaTable, label: 'Course Finder', link: '/frenchise/course' },
+  { icon: FaChartBar, label: 'Countries', link: '/frenchise/country' },
   {
     icon: FaTicket,
-    label: 'Profile Assessment',
+    label: 'Create Assessment',
     hasSubmenu: true,
     submenu: [
       { label: 'Add  Assessment',  link: '/frenchise/profile/create' },
@@ -58,7 +41,32 @@ const menuItems = [
    
     ],
   },
-    // { icon: FaList, label: 'Information', link: '/frenchise/usefullinformation' },
+  {
+    icon: FaUser,
+    label: 'Apply Student',
+    hasSubmenu: true,
+    submenu: [
+      { label: 'Add Student', link: '/frenchise/student/add' },
+      { label: 'View Student', link: '/frenchise/student/view' },
+      {label:'Track Student' ,link: '/frenchise/student/track'},
+    ],
+  },
+  
+  {icon: FaList, label: 'Useful Information', link: '/frenchise/usefullinformation' },
+  { icon: FaMoneyBill, label: 'Commission List', link: '/frenchise/commission' },
+  {
+      icon: FaUser,
+      label: 'Add Counsellor',
+      hasSubmenu: true,
+      submenu: [
+        { label: 'Add Counsellor', link: '/frenchise/addUser' },
+        { label: 'View Counsellor', link: '/frenchise/viewUser' },
+      ],
+  },
+    { icon: FaMoneyBill1Wave, label: 'Loan Lead', link: '/frenchise/loan' },
+    { icon: FaMoneyBill1Wave, label: 'Recived Payment', link: '/frenchise/transaction' },
+  
+  
     // { icon: FaMoneyBill, label: 'Commission', link: '/frenchise/commission' },
     // { icon: FaMoneyBill1Wave, label: 'Loan', link: '/frenchise/loan' },
     // { icon: FaMoneyBill1Wave, label: 'Payment', link: '/frenchise/transaction' },
@@ -170,7 +178,7 @@ export default function PartnerLayout() {
         <div className="flex flex-col items-center mt-8 mb-8">
         
           <img
-            src={Placeholder}
+            src={ userInfo.ProfilePhoto ? userInfo.ProfilePhoto : Placeholder}
             alt="User"
             className="w-12 h-12 rounded-full mb-2"
           />
@@ -299,15 +307,13 @@ export default function PartnerLayout() {
             </div>
 
             <div className="flex items-center mr-[50px] space-x-6">
-              <div className="relative">
+              <div className="relative ">
                 <button
-                  onClick={toggleNotifications}
-                  className="relative text-gray-600 focus:outline-none"
+                    onClick={()=>navigate('/frenchise/notification')}
+                    className="relative text-white focus:outline-none"
                 >
                   <FaBell size={30} />
-                  <span className="absolute top-0 right-0 bg-red-600 text-white text-sm rounded-full px-1">
-                    {notifications.length}
-                  </span>
+                
                 </button>
 
                 {/* Notifications Dropdown */}
@@ -346,7 +352,7 @@ export default function PartnerLayout() {
               <div className="relative">
                 <button
                   onClick={toggleDropdown}
-                  className="relative text-gray-600 focus:outline-none"
+                  className="relative text-white focus:outline-none"
                 >
                   <FaUserCircle size={30} />
                 </button>

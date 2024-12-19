@@ -26,12 +26,13 @@ import { FaTicket } from 'react-icons/fa6';
 
 const menuItems = [
   { icon: FaCube, label: 'Dashboard', link: '/counsellor/dashboard' },
-  { icon: FaIcons, label: 'University', link: '/counsellor/university' },
+  { icon: FaIcons, label: 'Universities', link: '/counsellor/university' },
+  { icon: FaTable, label: 'Course Finder', link: '/counsellor/course' },
+
   { icon: FaChartBar, label: 'Country', link: '/counsellor/country' },
-  { icon: FaTable, label: 'Course', link: '/counsellor/course' },
   {
     icon: FaUser,
-    label: 'Student Pages',
+    label: 'Apply Student',
     hasSubmenu: true,
     submenu: [
       { label: 'Add Student', link: '/counsellor/student/add' },
@@ -41,7 +42,7 @@ const menuItems = [
   },
   {
     icon: FaTicket,
-    label: 'Profile Assessment',
+    label: 'Create Assessment',
     hasSubmenu: true,
     submenu: [
       { label: 'Add  Assessment',  link: '/counsellor/profile/create' },
@@ -299,13 +300,12 @@ export default function CounsellorLayout() {
             <div className="flex items-center mr-[50px] space-x-6">
               <div className="relative">
                 <button
-                  onClick={toggleNotifications}
-                  className="relative text-gray-600 focus:outline-none"
+                   onClick={()=>navigate('/counsellor/notification')}
+
+                  className="relative text-white focus:outline-none"
                 >
                   <FaBell size={30} />
-                  <span className="absolute top-0 right-0 bg-red-600 text-white text-sm rounded-full px-1">
-                    {notifications.length}
-                  </span>
+             
                 </button>
 
                 {/* Notifications Dropdown */}
@@ -344,7 +344,7 @@ export default function CounsellorLayout() {
               <div className="relative">
                 <button
                   onClick={toggleDropdown}
-                  className="relative text-gray-600 focus:outline-none"
+                  className="relative text-white focus:outline-none"
                 >
                   <FaUserCircle size={30} />
                 </button>
@@ -358,18 +358,7 @@ export default function CounsellorLayout() {
                     transition={{ duration: 0.3 }}
                     className="absolute mt-2 right-0 w-40 bg-white shadow-lg rounded-lg z-10 border border-gray-200"
                   >
-                    <Link
-                      to="/frenchise/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Profile
-                    </Link>
-                    <Link
-                      to="/settings"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Settings
-                    </Link>
+               
                     <button
                       onClick={logoutHandler}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

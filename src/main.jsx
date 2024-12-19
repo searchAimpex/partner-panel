@@ -101,6 +101,11 @@ const router = createBrowserRouter(
         <Route path= '/frenchise/key' element = {<PartnerKey />} />
         <Route path = '/frenchise/profile/create' element = {<PartnerCreateProfile />} />
         <Route path = '/frenchise/assessment/view' element = {< PartnerAssessmentView/>} />
+        <Route path = '/frenchise/usefullinformation'  element = {<PartnerUsefulInformationScreen />} />  
+        <Route path = '/frenchise/commission' element = {< PartnerCommissionScreen />} />
+        <Route path = '/frenchise/loan' element = {<PartnerLoanScreen />} />
+    
+
       </Route>
       <Route element={<CounsellerRoutes />}>
         <Route path=  '/counsellor/dashboard' element={<DashboardScreen/>} />
