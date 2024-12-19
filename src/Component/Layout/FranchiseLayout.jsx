@@ -14,6 +14,7 @@ import {
   FaUserCircle,
   FaList,
   FaMoneyBill,
+  FaDownload,
 } from 'react-icons/fa';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -53,6 +54,8 @@ const menuItems = [
   },
   
   {icon: FaList, label: 'Useful Information', link: '/frenchise/usefullinformation' },
+  { icon: FaDownload, label: 'Marketing Items', link: '/frenchise/promotional' },
+
   { icon: FaMoneyBill, label: 'Commission List', link: '/frenchise/commission' },
   {
       icon: FaUser,
@@ -153,10 +156,10 @@ export default function PartnerLayout() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex bg-gray-50">
       {/* Sidebar */}
       <div
-        className={`bg-white shadow-lg text-gray-700 transition-all duration-300 ease-in-out ${
+        className={`bg-white shadow-lg h-full text-gray-700 transition-all duration-300 ease-in-out ${
           isCollapsed ? 'w-20' : 'w-64'
         }`}
       >
@@ -191,11 +194,11 @@ export default function PartnerLayout() {
         </div>
 
         {/* Menu Items */}
-        <nav>
+        <nav className='overflow-auto'>
           {menuItems.map((item, index) => {
             const isActive = location.pathname.startsWith(item.link);
             return (
-              <div key={index}>
+              <div  key={index}>
                 <div
                   onClick={(event) => {
                     if (item.hasSubmenu) {
@@ -250,7 +253,7 @@ export default function PartnerLayout() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col">
         {/* Navbar */}
         <header className="bg-white shadow-sm">
           <div className="flex items-center justify-between p-4">
@@ -392,7 +395,7 @@ export default function PartnerLayout() {
         </header>
 
         {/* Main Content Outlet */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-scroll">
           <Outlet />
         </main>
       </div>

@@ -55,7 +55,6 @@ const menuItems = [
     ],
   },
   { icon: FaList, label: 'Useful Information', link: '/partner/usefullinformation' },
-  { icon: FaDownload, label: 'Marketing Items', link: '/partner/promotional' },
   { icon: FaMoneyBill, label: 'Commission List', link: '/partner/commission' },
 
   {
@@ -68,7 +67,6 @@ const menuItems = [
     ],
   },
   { icon: FaMoneyBill1Wave, label: 'Loan Lead', link: '/partner/loan' },
-  { icon: FaMoneyBill1Wave, label: 'Recived Payment', link: '/partner/transaction' },
 
 
 
